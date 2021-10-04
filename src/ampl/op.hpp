@@ -8,12 +8,12 @@ namespace ampl {
   using namespace std;
 
   struct VM;
-  
-  struct Op {
-    Op(Form &form);
-    virtual PC eval(VM &vm) = 0;
 
-    Form &form;
+  struct Op {
+    enum Code {AMPL_GOTO, AMPL_PUSH, AMPL_STOP};
+    Op(Code code, const Form &form);
+    Code code;
+    Form form;
   };
 }
 

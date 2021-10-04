@@ -1,5 +1,5 @@
 #include "ampl/op.hpp"
 
 namespace ampl {
-  Op::Op(Form &form): form(form) {}
+  Op::Op(Code code, const Form &form): code(code), form(form) {}
 }

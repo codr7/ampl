@@ -5,6 +5,7 @@
 
 #include "ampl/libs/abc.hpp"
 #include "ampl/stack.hpp"
+#include "ampl/op.hpp"
 #include "ampl/sym.hpp"
 #include "ampl/type.hpp"
 #include "ampl/types.hpp"
@@ -18,12 +19,15 @@ namespace ampl {
       Libs(VM &vm);
       libs::ABC abc;
     };
-      
+    
+    using Ops = vector<Op>;
+
     static const size_t SLAB_SIZE = 1024;
 
     VM();
     
     Sym sym(const string &name);
+    bool eval(PC start_pc);
 
     Val &push(const Val &val);
 
@@ -38,6 +42,7 @@ namespace ampl {
     
     unordered_map<string, Sym> syms;
     Libs libs;
+    Ops ops;
     Stack stack;
   };
 }

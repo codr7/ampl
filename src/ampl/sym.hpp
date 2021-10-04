@@ -13,7 +13,7 @@ namespace ampl {
     Sym(const string_view &name);
 
     Id id;
-    const string name;
+    string name;
   };
 }
 
