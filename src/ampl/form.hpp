@@ -21,7 +21,7 @@ namespace ampl {
     struct TType: Type {};
 
     template <typename T>
-    Form(const TType<T> &type, Pos pos, const T &data): type(type), pos(pos), data(data) {}
+    Form(Pos pos, const TType<T> &type, const T &data): pos(pos), type(type), data(data) {}
 
     template <typename T>
     T &as() { return any_cast<T &>(data); }
@@ -29,8 +29,8 @@ namespace ampl {
     template <typename T>
     const T &as() const { return any_cast<const T &>(data); }
 
-    const Type &type;
     Pos pos;
+    const Type &type;
     any data;
   };
 }

@@ -12,5 +12,5 @@ namespace ampl::forms {
     return t;
   }
 
-  Form make_id(Pos pos, Sym name) { return Form(id_type(), pos, name); }
+  Form make_id(Pos pos, Sym name) { return Form(pos, id_type(), name); }
 }

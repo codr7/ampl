@@ -1,6 +1,7 @@
-* add goto dispatch
-** alisp/eval.c
-** add ops::Nop Push Stop
+* add vm.emit fn
+* add Goto/Push/Stop ops
+* add Lit form
+* -- 
 * add proc
 * add bool Type.true_val(const Val &val)
 * add bool_type
