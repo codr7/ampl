@@ -1,8 +1,8 @@
-* add vm.emit fn
-* add Goto/Push/Stop ops
+* convert Form to lgpp::Tok style
+* convert Type/TType to lggp::Tok style
 * add Lit form
-* -- 
 * add proc
+* add frame
 * add bool Type.true_val(const Val &val)
 * add bool_type
 * add ops::Branch

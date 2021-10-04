@@ -35,4 +35,8 @@ namespace ampl {
   };
 }
 
+namespace ampl::forms {
+  const Form &stop();
+}
+
 #endif

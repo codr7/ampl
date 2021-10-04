@@ -11,7 +11,7 @@ namespace ampl {
   
   struct Val {
     template <typename T>
-    Val(TType<T> &type, const T& data): type(type), data(data) {}
+    Val(const TType<T> &type, const T& data): type(type), data(data) {}
 
     template <typename T>
     T &as() { return any_cast<T &>(data); }

@@ -15,6 +15,8 @@ namespace ampl {
     Id id;
     string name;
   };
+
+  bool operator==(const Sym &lhs, const Sym &rhs);
 }
 
 #endif

@@ -27,6 +27,8 @@ namespace ampl {
     VM();
     
     Sym sym(const string &name);
+    Op &emit(const Op &op);
+    
     bool eval(PC start_pc);
 
     Val &push(const Val &val);

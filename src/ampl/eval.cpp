@@ -8,7 +8,7 @@
 #define AMPL_TRACE(name)
 
 #define AMPL_DISPATCH(prev)						\
-  goto *dispatch[ops[pc++].code];
+  goto *dispatch[(op = &ops[pc++])->code];
 
 namespace ampl {
 
@@ -16,17 +16,17 @@ namespace ampl {
     static const void* dispatch[] = {&&GOTO, &&PUSH, &&STOP};
 
     PC pc = start_pc;
+    Op *op = nullptr;
     AMPL_DISPATCH(pc);
 
   GOTO: {
       AMPL_TRACE(GOTO);
-      
-      AMPL_DISPATCH(pc);
+      AMPL_DISPATCH(op->as<ops::Goto>().pc);
     }
 
   PUSH: {
       AMPL_TRACE(PUSH);
-      
+      push(op->as<ops::Push>().val);
       AMPL_DISPATCH(pc);
     }
 
