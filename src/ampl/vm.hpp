@@ -27,7 +27,13 @@ namespace ampl {
     VM();
     
     Sym sym(const string &name);
-    Op &emit(const Op &op);
+
+    template <typename T, typename...Args>
+    Op &emit(Args&&...args) {
+      T data(forward<Args>(args)...);
+      ops.push_back(Op(data));
+      return ops.back();
+    }
     
     bool eval(PC start_pc);
 

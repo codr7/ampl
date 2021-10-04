@@ -12,11 +12,6 @@ namespace ampl {
     return i->second;
   }
 
-  Op &VM::emit(const Op &op) {
-    ops.push_back(op);
-    return ops.back();
-  }
-
   Val &VM::push(const Val &val) {
     stack.push_back(val);
     return stack.back();

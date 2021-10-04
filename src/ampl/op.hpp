@@ -10,32 +10,36 @@ namespace ampl {
   using namespace std;
 
   struct VM;
+  enum OpCode {GOTO = 0, PUSH, STOP};
 
   namespace ops {
     struct Goto {
-      Goto(PC pc): pc(pc) {}
+      static const OpCode CODE = GOTO;      
+
+      Goto(Form form, PC pc): form(form), pc(pc) {}
       
+      Form form;
       PC pc;
     };
       
     struct Push {
+      static const OpCode CODE = PUSH;      
+
       template <typename T>
-      Push(const TType<T> &type, const T &data): val(type, data) {}
+      Push(Form form, const TType<T> &type, const T &data): form(form), val(type, data) {}
       
+      Form form;
       Val val;
     };
 
-    struct Void {
+    struct Stop {
+      static const OpCode CODE = STOP;
     };
   }
   
-  enum Code {AMPL_GOTO = 0, AMPL_PUSH, AMPL_STOP};
-
   struct Op {
-    static const int DATA_SIZE = 64;
-
     template <typename T>
-    Op(const Form &form, Code code, const T &data): form(form), code(code), data(data) { }
+    Op(const T &data): code(T::CODE), data(data) { }
 
     template <typename T>
     T &as() { return get<T>(data); }
@@ -43,23 +47,9 @@ namespace ampl {
     template <typename T>
     const T &as() const { return get<T>(data); }
 
-    Form form;
-    Code code;
-    variant<ops::Goto, ops::Push, ops::Void> data;
+    OpCode code;
+    variant<ops::Goto, ops::Push, ops::Stop> data;
   };
-
-  namespace ops {
-    Op make_goto(const Form &form, PC pc);
-
-    template <typename T>
-    Op make_push(const Form &form, const TType<T> &type, const T &data) {
-      return Op(form, AMPL_PUSH, Push(type, data));
-    }
-  }
-}
-
-namespace ampl::ops {
-  const Op &stop();
 }
 
 #endif

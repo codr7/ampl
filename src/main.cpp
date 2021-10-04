@@ -12,8 +12,8 @@ int main() {
   VM vm;
   Form form = forms::make_id(Pos::INVALID, vm.sym("test_push"));
     
-  vm.emit(ops::make_push(form, vm.libs.abc.int_type, 42));
-  vm.emit(ops::stop());
+  vm.emit<ops::Push>(form, vm.libs.abc.int_type, 42);
+  vm.emit<ops::Stop>();
   vm.eval(0);
 
   cout << vm.stack << endl;
