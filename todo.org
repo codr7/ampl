@@ -1,0 +1,11 @@
+* add goto dispatch
+** alisp/eval.c
+** add ops::Nop Push Stop
+* add proc
+* add bool Type.true_val(const Val &val)
+* add bool_type
+* add ops::Branch
+* add repl
+** add readers.hpp/cpp
+** />
+* add string_type
