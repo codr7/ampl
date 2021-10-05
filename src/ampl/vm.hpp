@@ -7,7 +7,7 @@
 #include "ampl/libs/abc.hpp"
 #include "ampl/stack.hpp"
 #include "ampl/op.hpp"
-#include "ampl/proc.hpp"
+#include "ampl/env.hpp"
 #include "ampl/scope.hpp"
 #include "ampl/sym.hpp"
 #include "ampl/type.hpp"
@@ -23,7 +23,7 @@ namespace ampl {
     };
     
     VM(): libs(*this) {
-      procs.emplace_back();
+      envs.emplace_back();
     }
     
     Sym sym(const string &name) {
@@ -34,25 +34,25 @@ namespace ampl {
     }
 
     Val &push(const Val &val) {
-      Stack &s = proc().stack;
+      Stack &s = env().stack;
       s.push_back(val);
       return s.back();
     }
 
     template <typename T>
     Val &push(TType<T> &type, const T &data) {
-      Stack &s = proc().stack;
+      Stack &s = env().stack;
       s.emplace_back(type, data);
       return s.back();
     }
 
     Val *peek() {
-      Stack &s = proc().stack;
+      Stack &s = env().stack;
       return s.empty() ? nullptr : &s.back();
     }
 
     optional<Val> pop() {
-      Stack &s = proc().stack;
+      Stack &s = env().stack;
       if (s.empty()) { return nullopt; }
       Val v = s.back();
       s.pop_back();
@@ -68,15 +68,15 @@ namespace ampl {
     
     bool eval(PC start_pc);
 
-    Proc &proc() { return procs.back(); }
+    Env &env() { return envs.back(); }
 
-    Stack &stack() { return proc().stack; }
+    Stack &stack() { return env().stack; }
     
     unordered_map<string, Sym> syms;
     Libs libs;
     Scope scope;
     vector<Op> ops;
-    vector<Proc> procs;
+    vector<Env> envs;
   };
 }
 

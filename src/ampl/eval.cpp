@@ -47,7 +47,7 @@ namespace ampl {
 
       {
 	auto &load = op->as<ops::Load>();
-	auto v = proc().regs[load.reg];
+	auto v = env().regs[load.reg];
 	if (!v) { throw EvalError(load.form.pos, "Nothing to load"); }
 	push(*v);
       }
@@ -68,7 +68,7 @@ namespace ampl {
 	auto &store = op->as<ops::Store>();
 	auto v = pop();
 	if (!v) { throw EvalError(store.form.pos, "Stack is empty"); }
-	proc().regs[store.reg] = v;
+	env().regs[store.reg] = v;
       }
       
       DISPATCH(pc+1);

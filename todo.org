@@ -1,5 +1,7 @@
 * add macro
+** deque arg like form emit
 * add func
+** return pc from body
 * add frame
 * add repl
 ** lgpp
