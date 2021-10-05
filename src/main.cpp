@@ -1,4 +1,5 @@
 #include <iostream>
+#include "ampl/ampl.hpp"
 #include "ampl/forms/id.hpp"
 #include "ampl/val.hpp"
 #include "ampl/vm.hpp"
@@ -7,7 +8,7 @@ using namespace std;
 using namespace ampl;
 
 int main() {
-  cout << "Welcome to />mpl v1" << endl;
+  cout << "Welcome to />mpl v" << VERSION << endl;
 
   VM vm;
   Form form(Pos::INVALID, forms::Id(vm.sym("test_push")));

@@ -2,8 +2,8 @@
 #define AMPL_OP_HPP
 
 #include <variant>
+#include "ampl/ampl.hpp"
 #include "ampl/form.hpp"
-#include "ampl/types.hpp"
 #include "ampl/val.hpp"
 
 namespace ampl {

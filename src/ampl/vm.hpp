@@ -3,12 +3,12 @@
 
 #include <unordered_map>
 
+#include "ampl/ampl.hpp"
 #include "ampl/libs/abc.hpp"
 #include "ampl/stack.hpp"
 #include "ampl/op.hpp"
 #include "ampl/sym.hpp"
 #include "ampl/type.hpp"
-#include "ampl/types.hpp"
 #include "ampl/val.hpp"
 
 namespace ampl {
