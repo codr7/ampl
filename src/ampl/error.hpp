@@ -29,6 +29,12 @@ namespace ampl {
     EvalError(const Pos &pos, const string &message, Args &&...args):
       PosError(pos, message, forward<Args>(args)...) {}
   };
+
+  struct ReadError: PosError {
+    template <typename...Args>
+    ReadError(const Pos &pos, const string &message, Args &&...args):
+      PosError(pos, message, forward<Args>(args)...) {}
+  };
 }
 
 #endif

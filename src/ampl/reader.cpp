@@ -2,12 +2,13 @@
 #include <sstream>
 #include <vector>
 #include "ampl/forms/id.hpp"
+#include "ampl/forms/lit.hpp"
 #include "ampl/reader.hpp"
 #include "ampl/vm.hpp"
 
 namespace ampl {
   optional<Form> read_form(istream &in, Pos &pos, VM &vm) {
-    vector<Reader> readers {read_ws, read_id};
+    vector<Reader> readers {read_ws, read_int, read_id};
     optional<Form> f;
     
     for (Reader r: readers) {
@@ -34,6 +35,41 @@ namespace ampl {
 
     if (!buf.tellp()) { return nullopt; }
     return Form(fpos, forms::Id(vm.sym(buf.str())));
+  }
+
+   static int read_int_base(istream &in, Pos &pos, int base) {
+    int v(0);
+    
+    static map<char, int8_t> char_vals = {
+      {'0', 0}, {'1', 1}, {'2', 2}, {'3', 3}, {'4', 4}, {'5', 5}, {'6', 6}, {'7', 7},
+      {'8', 8}, {'9', 9}, {'a', 10}, {'b', 11}, {'c', 12}, {'d', 13}, {'e', 14},
+      {'f', 15}
+    };
+    
+    auto ci(char_vals.end());
+    char c = 0;
+    
+    while (in.get(c)) {
+      if ((ci = char_vals.find(c)) == char_vals.end()) { break; }
+      auto cv(ci->second);
+      if (cv >= base) { throw ReadError(pos, "Invalid integer: ", c); }
+      v = v * base + cv;
+      pos.column++;
+    }
+    if (!in.eof()) { in.unget();}
+    return v;
+  }
+  
+  optional<Form> read_int(istream &in, Pos &pos, VM &vm) {
+    char c = 0;
+
+    if (!in.get(c)) { return nullopt; }
+    if (c) { in.unget(); }
+    if (!isdigit(c)) { return nullopt; }
+    
+    Pos fpos = pos;
+    int v = read_int_base(in, pos, 10);
+    return Form(fpos, forms::Lit(vm.libs.abc.int_type, v));
   }
   
   optional<Form> read_ws(istream &in, Pos &pos, VM &vm) {

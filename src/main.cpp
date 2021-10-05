@@ -1,10 +1,7 @@
 #include <iostream>
 #include <sstream>
 
-#include "ampl/ampl.hpp"
-#include "ampl/forms/id.hpp"
 #include "ampl/reader.hpp"
-#include "ampl/val.hpp"
 #include "ampl/vm.hpp"
 
 using namespace std;

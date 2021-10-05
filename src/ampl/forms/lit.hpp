@@ -10,6 +10,9 @@ namespace ampl::forms {
   struct Lit {
     Lit(const Val &val);
 
+    template <typename T>
+    Lit(const TType<T> &type, const T &data): val(type, data) {}
+    
     Val val;
   };
 
