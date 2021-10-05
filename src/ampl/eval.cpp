@@ -1,37 +1,52 @@
+#include "ampl/error.hpp"
 #include "ampl/vm.hpp"
 
 /*
-  #define AMPL_TRACE(name)						\
+  #define TRACE(name)						\
   cout << #name << endl;						\
 */
 
-#define AMPL_TRACE(name)
+#define TRACE(name)
 
-#define AMPL_DISPATCH(prev)						\
-  goto *dispatch[(op = &ops[pc++])->code];
+#define DISPATCH(next_pc)				\
+  goto *dispatch[(op = &ops[(pc = (next_pc))])->code];
 
 namespace ampl {
 
   bool VM::eval(PC start_pc) {
-    static const void* dispatch[] = {&&GOTO, &&PUSH, &&STOP};
+    static const void* dispatch[] = {&&BRANCH, &&GOTO, &&PUSH, &&STOP};
 
     PC pc = start_pc;
     Op *op = nullptr;
-    AMPL_DISPATCH(pc);
+    DISPATCH(pc);
+
+  BRANCH: {
+      TRACE(BRANCH);
+      auto &branch = op->as<ops::Branch>();
+      bool ok = false;
+
+      {
+	auto v = pop();
+	if (!v) { throw EvalError(branch.form.pos, "Missing branch condition"); }
+	ok = v->is_true();
+      }
+      
+      DISPATCH(ok ? pc+1 : branch.false_pc);
+    }
 
   GOTO: {
-      AMPL_TRACE(GOTO);
-      AMPL_DISPATCH(op->as<ops::Goto>().pc);
+      TRACE(GOTO);
+      DISPATCH(op->as<ops::Goto>().pc);
     }
 
   PUSH: {
-      AMPL_TRACE(PUSH);
+      TRACE(PUSH);
       push(op->as<ops::Push>().val);
-      AMPL_DISPATCH(pc);
+      DISPATCH(pc+1);
     }
 
   STOP: {
-      AMPL_TRACE(STOP);
+      TRACE(STOP);
     }
   
     return true;

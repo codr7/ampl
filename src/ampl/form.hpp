@@ -55,7 +55,7 @@ namespace ampl {
     };
 
     template <typename T>
-    Form(Pos pos, T imp): pos(pos), imp(make_shared<TImp<T>>(move(imp))) {}
+    Form(const Pos &pos, T imp): pos(pos), imp(make_shared<TImp<T>>(move(imp))) {}
 
     template <typename T>
     const T& as() const { return dynamic_cast<const TImp<T>&>(*imp).imp; }

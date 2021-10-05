@@ -21,6 +21,8 @@ namespace ampl {
 
     void dump(ostream &out) const;
 
+    bool is_true() const;
+    
     Type type;
     any data;
   };

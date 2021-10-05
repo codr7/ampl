@@ -8,6 +8,11 @@ namespace ampl {
     type.methods.dump(*this, out);
   }
 
+  bool Val::is_true() const {
+    assert(type.methods.is_true);
+    return type.methods.is_true(*this);
+  }
+
   ostream &operator <<(ostream &out, const Val &val) {
     val.dump(out);
     return out;
