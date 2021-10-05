@@ -7,12 +7,14 @@ namespace ampl {
   using namespace std;
   
   struct Pos {
+    static const int MIN_LINE = 1, MIN_COLUMN = 0;
     static const Pos INVALID;
     
-    Pos(const string_view source = "n/a", int row = -1, int col = -1);
+    Pos(const string &source = "*invalid*", int line = MIN_LINE, int column = MIN_COLUMN):
+      source(source), line(line), column(column) {}
 
     string source;
-    int row, col;
+    int line, column;
   };
 }
 

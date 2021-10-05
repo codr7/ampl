@@ -1,8 +1,7 @@
 * add repl
-** add id_reader
-*** optional<Form> result
+** add read_id
+*** add to read_form
 *** lgpp
-*** add reader.hpp/cpp
 * add func
 ** fixed size args/rets like Env::regs
 ** return pc from body
