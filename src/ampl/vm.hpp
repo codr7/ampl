@@ -59,6 +59,13 @@ namespace ampl {
       return v;
     }
 
+    bool drop(uint64_t count = 1) {
+      Stack &s = env().stack;
+      if (s.size() < count) { return false; }
+      s.erase(s.end()-count, s.end());
+      return true;
+    }
+    
     template <typename T, typename...Args>
     Op &emit(Args&&...args) {
       T data(forward<Args>(args)...);

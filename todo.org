@@ -3,9 +3,6 @@
 *** optional<Form> result
 *** lgpp
 *** add reader.hpp/cpp
-** />
-* add ddd
-** add drop op
 * add func
 ** fixed size args/rets like Env::regs
 ** return pc from body

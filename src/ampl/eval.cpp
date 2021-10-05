@@ -15,7 +15,7 @@ namespace ampl {
 
   bool VM::eval(PC start_pc) {
     static const void* dispatch[] = {
-      &&BRANCH, &&COPY, &&GOTO, &&LOAD, &&PUSH, &&STORE,
+      &&BRANCH, &&COPY, &&DROP, &&GOTO, &&LOAD, &&PUSH, &&STORE,
       //---STOP---
       &&STOP};
 
@@ -48,6 +48,12 @@ namespace ampl {
 	s.push_back(s.back());
       }
 
+      DISPATCH(pc+1);
+    }
+
+  DROP: {
+      TRACE(DROP);
+      drop(op->as<ops::Drop>().count);
       DISPATCH(pc+1);
     }
 

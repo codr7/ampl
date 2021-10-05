@@ -9,16 +9,22 @@ namespace ampl::forms {
   
   template <>
   void emit(const Form &form, const Id &id, deque<Form> &in, VM &vm) {
-    auto found = vm.scope.find(id.name);
+    const string &ids = id.name.name;
     
-    if (found) {
-      if (found->type == vm.libs.abc.macro_type) {
-	found->as<Macro>().expand(form, in, vm);
-      } else {
-	vm.emit<ops::Push>(form, *found);
-      }
+    if (ids.find_first_not_of('d') == string::npos) {
+      vm.emit<ops::Drop>(form, ids.length());
     } else {
-      throw runtime_error("Not implemented");
+      auto found = vm.scope.find(id.name);
+      
+      if (found) {
+	if (found->type == vm.libs.abc.macro_type) {
+	  found->as<Macro>().expand(form, in, vm);
+	} else {
+	  vm.emit<ops::Push>(form, *found);
+	}
+      } else {
+	throw EmitError(form.pos, "Unknown id: ", ids);
+      }
     }
   }
 
