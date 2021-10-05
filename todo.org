@@ -1,4 +1,3 @@
-* add T/F bindings
 * add ddd
 ** add drop op
 * add repl

@@ -13,7 +13,7 @@ namespace ampl {
     void bind(const Sym &key, const TType<T> &type, const T &data) {
       auto found = bindings.find(key);
       if (found != bindings.end()) { throw Error("Dup binding: ", key.name); }
-      found->second = Val(type, data);
+      bindings.emplace(key, Val(type, data));
     }
     
     map<Sym, Val> bindings;

@@ -15,6 +15,9 @@ namespace ampl::libs {
     int_type.methods.is_true = [](auto &val) { return val.template as<int>(); };
     stack_type.methods.is_true = [](auto &val) { return !val.template as<Stack>().empty(); };
 
+    bind(vm.sym("T"), bool_type, true);
+    bind(vm.sym("F"), bool_type, false);
+    
     bind(vm.sym("cp"), macro_type, Macro(vm.sym("cp"), 0,
 					 [&vm](Macro &self, const Form &form, deque<Form> &in) {
 					   vm.emit<ops::Copy>(form);
