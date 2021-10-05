@@ -1,7 +1,5 @@
 * add repl
-** add read_id
-*** add to read_form
-*** lgpp
+** lgpp
 * add func
 ** fixed size args/rets like Env::regs
 ** return pc from body
