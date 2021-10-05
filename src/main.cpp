@@ -8,7 +8,7 @@ using namespace std;
 using namespace ampl;
 
 int main() {
-  cout << "Welcome to />mpl v" << VERSION << endl;
+  cout << "/>mpl v" << VERSION << endl;
 
   VM vm;
   Form form(Pos::INVALID, forms::Id(vm.sym("test_push")));

@@ -7,6 +7,7 @@
 #include "ampl/libs/abc.hpp"
 #include "ampl/stack.hpp"
 #include "ampl/op.hpp"
+#include "ampl/scope.hpp"
 #include "ampl/sym.hpp"
 #include "ampl/type.hpp"
 #include "ampl/val.hpp"
@@ -46,6 +47,7 @@ namespace ampl {
     
     unordered_map<string, Sym> syms;
     Libs libs;
+    Scope scope;
     vector<Op> ops;
     Stack stack;
   };

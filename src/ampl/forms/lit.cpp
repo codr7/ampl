@@ -1,7 +1,8 @@
 #include "ampl/forms/lit.hpp"
+#include "ampl/vm.hpp"
 
 namespace ampl::forms {
-  Lit::Lit(const Sym &name): name(name) {}
+  Lit::Lit(const Val &val): val(val) {}
 
   template <>
   void dump(const Form &form, const Lit &lit, ostream &out) { out << lit.val; }

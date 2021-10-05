@@ -7,6 +7,8 @@ namespace ampl {
 
   bool operator==(const Sym &lhs, const Sym &rhs) { return lhs.id == rhs.id; }
 
+  bool operator<(const Sym &lhs, const Sym &rhs) { return lhs.id < rhs.id; }
+
   ostream &operator <<(ostream &out, const Sym &val) {
     out << val.name;
     return out;

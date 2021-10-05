@@ -18,6 +18,7 @@ namespace ampl {
   };
 
   bool operator==(const Sym &lhs, const Sym &rhs);
+  bool operator<(const Sym &lhs, const Sym &rhs);
 
   ostream &operator <<(ostream &out, const Sym &val);
 }

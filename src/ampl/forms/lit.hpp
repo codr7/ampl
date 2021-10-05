@@ -8,16 +8,16 @@ namespace ampl::forms {
   using namespace ampl;
   
   struct Lit {
-    Lit(const Sym &name);
+    Lit(const Val &val);
 
     Val val;
   };
 
   template <>
-  volit dump(const Form &form, const Lit &lit, ostream &out);
+  void dump(const Form &form, const Lit &lit, ostream &out);
   
   template <>
-  volit emit(const Form &form, const Lit &lit, deque<Form> &in, VM &vm);
+  void emit(const Form &form, const Lit &lit, deque<Form> &in, VM &vm);
 
   template <>
   optional<Val> val(const Form &form, const Lit &lit, VM &vm);

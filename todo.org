@@ -1,11 +1,9 @@
-* convert Type to lgpp::Tok style
-* add scope
-** implement Id emit
 * add Branch op
 * add proc
+** fixed array<optional<Val>> regs
 * add frame
 * add repl
 ** lgpp
-** add readers.hpp/cpp
+** add reader.hpp/cpp
 ** />
 * add string_type
