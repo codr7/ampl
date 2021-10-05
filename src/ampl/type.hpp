@@ -16,6 +16,7 @@ namespace ampl {
     
     struct Methods {
       function<void (const Val &val, ostream &out)> dump;
+      function<bool (const Val &val)> is_true;
     };
 
     Type(const Sym &name);

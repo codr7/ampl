@@ -12,10 +12,13 @@ namespace ampl::libs {
   using namespace ampl;
 
   struct ABC {
+    using BoolType = TType<bool>;
     using IntType = TType<int>;
     using StackType = TType<Stack>;
+    
     ABC(VM &vm);
 
+    BoolType bool_type;
     IntType int_type;
     StackType stack_type;
   };
