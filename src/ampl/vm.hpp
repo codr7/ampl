@@ -65,6 +65,16 @@ namespace ampl {
       ops.push_back(Op(data));
       return ops.back();
     }
+
+    void emit(const deque<Form> &in) {
+      deque<Form> tmp(in);
+
+      while (!tmp.empty()) {
+	Form f = tmp.front();
+	tmp.pop_front();
+	f.emit(tmp, *this);
+      }
+    }
     
     bool eval(PC start_pc);
 
