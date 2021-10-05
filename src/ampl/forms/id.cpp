@@ -13,7 +13,7 @@ namespace ampl::forms {
     
     if (found) {
       if (found->type == vm.libs.abc.macro_type) {
-	found->as<Macro>().expand(form, in);
+	found->as<Macro>().expand(form, in, vm);
       } else {
 	vm.emit<ops::Push>(form, *found);
       }

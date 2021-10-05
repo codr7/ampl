@@ -1,12 +1,13 @@
-* add ddd
-** add drop op
 * add repl
 ** add id_reader
 *** lgpp
 *** add reader.hpp/cpp
 ** />
+* add ddd
+** add drop op
 * add func
 ** return pc from body
 * add frame
 * add sym_type
+** add quote reader
 * add string_type

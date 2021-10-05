@@ -6,7 +6,7 @@ namespace ampl {
   Macro::Macro(const Sym &name, uint8_t arg_count, const Body &body):
     id(next_id++), name(name), arg_count(arg_count), body(body) {}
 
-  void Macro::expand(const Form &form, deque<Form> &in) { body(*this, form, in); }
+  void Macro::expand(const Form &form, deque<Form> &in, VM &vm) { body(*this, form, in, vm); }
 
   bool operator==(const Macro &lhs, const Macro &rhs) { return lhs.id == rhs.id; }
 

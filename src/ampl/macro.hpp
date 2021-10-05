@@ -14,10 +14,10 @@ namespace ampl {
     using Id = uint64_t;
     static Id next_id;
 
-    using Body = function<void (Macro &self, const Form &form, deque<Form> &in)>;
+    using Body = function<void (Macro &self, const Form &form, deque<Form> &in, VM &vm)>;
 
     Macro(const Sym &name, uint8_t arg_count, const Body &body);
-    void expand(const Form &form, deque<Form> &in);
+    void expand(const Form &form, deque<Form> &in, VM &vm);
     
     Id id;
     Sym name;

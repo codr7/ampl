@@ -19,7 +19,7 @@ namespace ampl::libs {
     bind(vm.sym("F"), bool_type, false);
     
     bind(vm.sym("cp"), macro_type, Macro(vm.sym("cp"), 0,
-					 [&vm](Macro &self, const Form &form, deque<Form> &in) {
+					 [](Macro &self, const Form &form, deque<Form> &in, VM &vm) {
 					   vm.emit<ops::Copy>(form);
 					 }));
   }
