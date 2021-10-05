@@ -32,8 +32,6 @@ Values are pushed on the stack in specified order.
 [1 2 3]
 ```
 
-```
-
 `cp` may be used to copy the top value.
 
 ```
