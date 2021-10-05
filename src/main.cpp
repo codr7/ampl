@@ -10,7 +10,7 @@ using namespace ampl;
 void repl(VM &vm, istream &in, ostream &out) {
   out << endl <<
     "Press Return on empty line to evaluate." << endl << endl <<
-    "May the source be with you!" << endl << endl;
+    "May the Source be with you!" << endl << endl;
     
    stringstream buf;
   

@@ -16,7 +16,7 @@ $ rlwrap ./ampl
 
 Press Return on empty line to evaluate.
 
-May the source be with you!
+May the Source be with you!
 
   42
 
