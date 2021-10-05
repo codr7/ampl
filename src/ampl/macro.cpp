@@ -11,7 +11,7 @@ namespace ampl {
   bool operator==(const Macro &lhs, const Macro &rhs) { return lhs.id == rhs.id; }
 
   ostream &operator <<(ostream &out, const Macro &macro) {
-    out << macro.name;
+    out << "Macro(" << macro.name << ' ' << macro.arg_count << ')';
     return out;
   }
 }
