@@ -27,12 +27,16 @@ namespace ampl {
     any data;
   };
 
+  bool operator==(const Val &lhs, const Val &rhs);
   ostream &operator <<(ostream &out, const Val &val);
 
   template <typename T>
   TType<T>::TType(const Sym &name): Type(name) {
     methods.dump = [](const Val &val, ostream &out) { out << val.as<T>(); };
+    methods.is_equal = [](const Val &x, const Val &y) { return x.as<T>() == y.as<T>(); };
   }
+
+
 }
 
 #endif

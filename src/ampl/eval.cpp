@@ -15,7 +15,7 @@ namespace ampl {
 
   bool VM::eval(PC start_pc) {
     static const void* dispatch[] = {
-      &&BRANCH, &&COPY, &&DROP, &&GOTO, &&LOAD, &&PUSH, &&STORE,
+      &&BRANCH, &&COPY, &&DROP, &&EQUAL, &&GOTO, &&LOAD, &&PUSH, &&STORE,
       //---STOP---
       &&STOP};
 
@@ -54,6 +54,19 @@ namespace ampl {
   DROP: {
       TRACE(DROP);
       drop(op->as<ops::Drop>().count);
+      DISPATCH(pc+1);
+    }
+
+  EQUAL: {
+      TRACE(EQUAL);
+
+      {
+	auto &equal = op->as<ops::Equal>();
+	optional<Val> y(equal.y ? equal.y : pop()), x(equal.x ? equal.x : pop());
+	if (!x || !y) { throw EvalError(equal.form.pos, "Missing arg"); }
+	push(libs.abc.bool_type, x == y);
+      }
+      
       DISPATCH(pc+1);
     }
 

@@ -16,6 +16,7 @@ namespace ampl {
     
     struct Methods {
       function<void (const Val &val, ostream &out)> dump;
+      function<bool (const Val &x, const Val &y)> is_equal;
       function<bool (const Val &val)> is_true;
     };
 
@@ -28,10 +29,11 @@ namespace ampl {
 
   template <typename T>
   struct TType: Type {
-    TType(const Sym &name);
+    TType(const Sym &name); // Defined in val.hpp
   };
 
   bool operator==(const Type &lhs, const Type &rhs);
+  bool operator!=(const Type &lhs, const Type &rhs);
   ostream &operator <<(ostream &out, const Type &type);
 }
 

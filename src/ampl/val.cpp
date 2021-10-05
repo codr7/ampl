@@ -13,6 +13,13 @@ namespace ampl {
     return type.methods.is_true(*this);
   }
 
+  bool operator==(const Val &lhs, const Val &rhs) {
+    if (lhs.type != rhs.type) { return false; }
+    auto is_equal = lhs.type.methods.is_equal;
+    assert(is_equal);
+    return is_equal(lhs, rhs);
+  }
+
   ostream &operator <<(ostream &out, const Val &val) {
     val.dump(out);
     return out;

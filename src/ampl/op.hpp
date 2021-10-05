@@ -11,7 +11,7 @@ namespace ampl {
 
   struct VM;
   enum OpCode {
-    BRANCH = 0, COPY, DROP, GOTO, LOAD, PUSH, STORE,
+    BRANCH = 0, COPY, DROP, EQUAL, GOTO, LOAD, PUSH, STORE,
     //---STOP---
     STOP};
 
@@ -40,6 +40,15 @@ namespace ampl {
       
       Form form;
       uint64_t count;
+    };
+    
+    struct Equal {
+      static const OpCode CODE = EQUAL;      
+
+      Equal(const Form &form, optional<Val> x = nullopt, const optional<Val> y = nullopt): form(form), x(x), y(y) {}
+      
+      Form form;
+      optional<Val> x, y;
     };
 
     struct Goto {
@@ -99,7 +108,7 @@ namespace ampl {
     const T &as() const { return get<T>(data); }
 
     OpCode code;
-    variant<ops::Branch, ops::Copy, ops::Drop, ops::Goto, ops::Load, ops::Push, ops::Store,
+    variant<ops::Branch, ops::Copy, ops::Drop, ops::Equal, ops::Goto, ops::Load, ops::Push, ops::Store,
 	    //---STOP---
 	    ops::Stop> data;
   };

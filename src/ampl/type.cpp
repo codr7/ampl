@@ -9,6 +9,7 @@ namespace ampl {
   }
 
   bool operator==(const Type &lhs, const Type &rhs) { return lhs.id == rhs.id; }
+  bool operator!=(const Type &lhs, const Type &rhs) { return lhs.id != rhs.id; } 
 
   ostream &operator <<(ostream &out, const Type &type) {
     out << type.name;

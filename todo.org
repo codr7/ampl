@@ -1,9 +1,17 @@
 * add read_int
+* add Type.isa
+** add parent_types
+*** add Type.MAX_COUNT
+**** check
+* add parent_type arg to Type/TType
+** add any_type
 * add func
 ** fixed size args/rets like Env::regs
 ** return pc from body
 * add frame
 ** use std to copy regs prefix
+* add math lib
+* fib
 * add sym_type
 ** add quote reader
 * add string_type
