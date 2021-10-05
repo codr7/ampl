@@ -31,14 +31,13 @@ namespace ampl {
 
   optional<Form> read_form(istream &in, Pos &pos, VM &vm) {
     vector<Reader> readers {read_ws};
-
+    optional<Form> f;
+    
     for (Reader r: readers) {
-      auto f = r(in, pos, vm);
-      if (f) {
-	return f;
-      }
+      f = r(in, pos, vm);
+      if (f) { break; }
     }
 
-    return nullopt;
+    return f;
   }
 }
