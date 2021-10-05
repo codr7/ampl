@@ -12,6 +12,8 @@ namespace ampl {
   
   struct Scope {
     Scope(optional<Scope> parent_scope = nullopt);
+
+    void bind(const Sym &key, const Val &val);
     optional<Val> find(const Sym &key) const;
     
     Reg reg_count = 0;

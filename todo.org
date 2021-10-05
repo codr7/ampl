@@ -1,5 +1,4 @@
-* add repl
-** lgpp
+* debug cp
 * add func
 ** fixed size args/rets like Env::regs
 ** return pc from body

@@ -15,6 +15,8 @@ namespace ampl {
       if (found != bindings.end()) { throw Error("Dup binding: ", key.name); }
       bindings.emplace(key, Val(type, data));
     }
+
+    void import(VM &vm);
     
     map<Sym, Val> bindings;
   };

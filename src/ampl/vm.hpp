@@ -65,6 +65,8 @@ namespace ampl {
       s.erase(s.end()-count, s.end());
       return true;
     }
+
+    PC pc() { return ops.size(); }
     
     template <typename T, typename...Args>
     Op &emit(Args&&...args) {

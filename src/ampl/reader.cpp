@@ -6,24 +6,21 @@
 #include "ampl/vm.hpp"
 
 namespace ampl {
-  using Reader = function<optional<Form> (istream &in, Pos &pos, VM &vm)>;
-
   optional<Form> read_form(istream &in, Pos &pos, VM &vm) {
     vector<Reader> readers {read_ws, read_id};
     optional<Form> f;
     
     for (Reader r: readers) {
-      f = r(in, pos, vm);
-      if (f) { break; }
+      if ((f = r(in, pos, vm))) { break; }
     }
 
     return f;
   }
 
-  optional<Form>read_id(istream &in, Pos &pos, VM &vm) {
+  optional<Form> read_id(istream &in, Pos &pos, VM &vm) {
     Pos fpos(pos);
-    char c = 0;
     stringstream buf;
+    char c = 0;
     
     while (in.get(c)) {
       if (!isgraph(c)) {
