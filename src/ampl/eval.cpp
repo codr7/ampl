@@ -41,7 +41,7 @@ namespace ampl {
       TRACE(COPY);
 
       {
-	auto &copy = op->as<ops::Push>();
+	auto &copy = op->as<ops::Copy>();
 	auto &s = stack();
 	
 	if (s.empty()) { throw EvalError(copy.form.pos, "Stack is empty"); }

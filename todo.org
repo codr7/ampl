@@ -1,4 +1,4 @@
-* debug cp
+* add read_int
 * add func
 ** fixed size args/rets like Env::regs
 ** return pc from body
