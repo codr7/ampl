@@ -10,7 +10,7 @@ int main() {
   cout << "Welcome to />mpl v1" << endl;
 
   VM vm;
-  Form form = forms::make_id(Pos::INVALID, vm.sym("test_push"));
+  Form form(Pos::INVALID, forms::Id(vm.sym("test_push")));
     
   vm.emit<ops::Push>(form, vm.libs.abc.int_type, 42);
   vm.emit<ops::Stop>();

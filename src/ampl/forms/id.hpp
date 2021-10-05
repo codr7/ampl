@@ -7,13 +7,17 @@
 namespace ampl::forms {
   using namespace ampl;
   
-  struct IdType: Form::TType<Sym> {
-    void dump(const Form &form, ostream &out) const override;
-    void emit(const Form &form, VM &vm) const override;
+  struct Id {
+    Id(const Sym &name);
+
+    Sym name;
   };
 
-  IdType &id_type();
-  Form make_id(Pos pos, Sym name);
+  template <>
+  void dump(const Form &form, const Id &id, ostream &out);
+  
+  template <>
+  void emit(const Form &form, const Id &id, deque<Form> &in, VM &vm);
 }
 
 #endif

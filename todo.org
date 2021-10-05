@@ -1,12 +1,13 @@
-* convert Form to lgpp::Tok style
-* convert Type/TType to lggp::Tok style
+* add form val method
 * add Lit form
+* convert Type to lgpp::Tok style
 * add proc
 * add frame
 * add bool Type.true_val(const Val &val)
 * add bool_type
 * add ops::Branch
 * add repl
+** lgpp
 ** add readers.hpp/cpp
 ** />
 * add string_type

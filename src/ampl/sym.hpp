@@ -1,6 +1,7 @@
 #ifndef AMPL_SYM_HPP
 #define AMPL_SYM_HPP
 
+#include <ostream>
 #include <string>
 
 namespace ampl {
@@ -17,6 +18,8 @@ namespace ampl {
   };
 
   bool operator==(const Sym &lhs, const Sym &rhs);
+
+  ostream &operator <<(ostream &out, const Sym &val);
 }
 
 #endif

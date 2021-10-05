@@ -1,16 +1,13 @@
 #include "ampl/forms/id.hpp"
 
 namespace ampl::forms {
-  void IdType::dump(const Form &form, ostream &out) const { out << form.as<Sym>().name; }
+  Id::Id(const Sym &name): name(name) {}
+
+  template <>
+  void dump(const Form &form, const Id &id, ostream &out) { out << id.name; }
   
-  void IdType::emit(const Form &form, VM &vm) const {
+  template <>
+  void emit(const Form &form, const Id &id, deque<Form> &in, VM &vm) {
 
   }
-
-  IdType &id_type() {
-    static IdType t;
-    return t;
-  }
-
-  Form make_id(Pos pos, Sym name) { return Form(pos, id_type(), name); }
 }

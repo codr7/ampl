@@ -1,7 +1,7 @@
 #ifndef AMPL_FORM_HPP
 #define AMPL_FORM_HPP
 
-#include <any>
+#include <deque>
 #include <ostream>
 
 #include "ampl/pos.hpp"
@@ -10,33 +10,55 @@ namespace ampl {
   using namespace std;
 
   struct VM;
+  struct Form;
   
+  namespace forms {
+    using namespace ampl;
+    
+    template <typename T>
+    void dump(const Form &self, const T &imp, ostream &out);
+
+    template <typename T>
+    void emit(const Form &self, const T &imp, deque<Form> &in, VM &vm) {}
+  }
+
   struct Form {
-    struct Type {
-      virtual void dump(const Form &form, ostream &out) const = 0;
-      virtual void emit(const Form &form, VM &vm) const = 0;
+    struct Imp {
+      virtual ~Imp() = default;
+      virtual void dump(const Form& self, ostream& out) const = 0;
+      virtual void emit(const Form &self, deque<Form> &in, VM &vm) const = 0;
     };
 
     template <typename T>
-    struct TType: Type {};
+    struct TImp: Imp {
+      TImp(T imp): imp(move(imp)) { }
+
+      void dump(const Form& self, ostream& out) const override {
+	forms::dump(self, imp, out);
+      }
+
+      void emit(const Form& self, deque<Form> &in, VM &vm) const override {
+	forms::emit(self, imp, in, vm);
+      }
+      
+      T imp;
+    };
 
     template <typename T>
-    Form(Pos pos, const TType<T> &type, const T &data): pos(pos), type(type), data(data) {}
+    Form(Pos pos, T imp): pos(pos), imp(make_shared<TImp<T>>(move(imp))) {}
 
     template <typename T>
-    T &as() { return any_cast<T &>(data); }
+    const T& as() const { return dynamic_cast<const TImp<T>&>(*imp).imp; }
 
     template <typename T>
-    const T &as() const { return any_cast<const T &>(data); }
+    const T* try_as() const {
+      auto timp = dynamic_cast<const TImp<T> *>(imp.get());
+      return timp ? &timp->imp : nullptr;
+    }
 
     Pos pos;
-    const Type &type;
-    any data;
+    shared_ptr<const Imp> imp;
   };
-}
-
-namespace ampl::forms {
-  const Form &stop();
 }
 
 #endif
