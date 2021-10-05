@@ -2,7 +2,8 @@
 #define AMPL_HPP
 
 namespace ampl {
-  const int VERSION = 1;
+  const int VERSION = 2;
+  
   using PC = uint64_t;
   using Reg = uint8_t;
 }
