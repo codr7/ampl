@@ -1,5 +1,5 @@
-* add proc
-** fixed array<optional<Val>> regs
+* add macro
+* add func
 * add frame
 * add repl
 ** lgpp

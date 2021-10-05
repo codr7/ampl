@@ -14,7 +14,10 @@
 namespace ampl {
 
   bool VM::eval(PC start_pc) {
-    static const void* dispatch[] = {&&BRANCH, &&GOTO, &&LOAD, &&PUSH, &&STOP};
+    static const void* dispatch[] = {
+      &&BRANCH, &&GOTO, &&LOAD, &&PUSH, &&STORE,
+      //---STOP---
+      &&STOP};
 
     PC pc = start_pc;
     Op *op = nullptr;
@@ -57,6 +60,21 @@ namespace ampl {
       push(op->as<ops::Push>().val);
       DISPATCH(pc+1);
     }
+
+  STORE: {
+      TRACE(STORE);
+      
+      {
+	auto &store = op->as<ops::Store>();
+	auto v = pop();
+	if (!v) { throw EvalError(store.form.pos, "Stack is empty"); }
+	proc().regs[store.reg] = v;
+      }
+      
+      DISPATCH(pc+1);
+    }
+
+    //---STOP---
 
   STOP: {
       TRACE(STOP);
