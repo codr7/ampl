@@ -1,10 +1,13 @@
-* add macro
-** deque arg like form emit
+* add T/F bindings
+* add ddd
+** add drop op
+* add repl
+** add id_reader
+*** lgpp
+*** add reader.hpp/cpp
+** />
 * add func
 ** return pc from body
 * add frame
-* add repl
-** lgpp
-** add reader.hpp/cpp
-** />
+* add sym_type
 * add string_type

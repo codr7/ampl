@@ -15,7 +15,7 @@ namespace ampl {
 
   bool VM::eval(PC start_pc) {
     static const void* dispatch[] = {
-      &&BRANCH, &&GOTO, &&LOAD, &&PUSH, &&STORE,
+      &&BRANCH, &&COPY, &&GOTO, &&LOAD, &&PUSH, &&STORE,
       //---STOP---
       &&STOP};
 
@@ -35,6 +35,20 @@ namespace ampl {
       }
       
       DISPATCH(ok ? pc+1 : branch.false_pc);
+    }
+
+  COPY: {
+      TRACE(COPY);
+
+      {
+	auto &copy = op->as<ops::Push>();
+	auto &s = stack();
+	
+	if (s.empty()) { throw EvalError(copy.form.pos, "Stack is empty"); }
+	s.push_back(s.back());
+      }
+
+      DISPATCH(pc+1);
     }
 
   GOTO: {

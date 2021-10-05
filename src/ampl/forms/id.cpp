@@ -12,7 +12,11 @@ namespace ampl::forms {
     auto found = vm.scope.find(id.name);
     
     if (found) {
-      vm.emit<ops::Push>(form, *found);
+      if (found->type == vm.libs.abc.macro_type) {
+	found->as<Macro>().expand(form, in);
+      } else {
+	vm.emit<ops::Push>(form, *found);
+      }
     } else {
       throw runtime_error("Not implemented");
     }

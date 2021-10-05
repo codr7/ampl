@@ -32,7 +32,6 @@ namespace ampl {
   };
 
   bool operator==(const Type &lhs, const Type &rhs);
-
   ostream &operator <<(ostream &out, const Type &type);
 }
 
