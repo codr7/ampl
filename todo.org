@@ -1,5 +1,3 @@
-* add form val method
-* add Lit form
 * convert Type to lgpp::Tok style
 * add proc
 * add frame

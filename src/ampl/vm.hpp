@@ -20,10 +20,6 @@ namespace ampl {
       libs::ABC abc;
     };
     
-    using Ops = vector<Op>;
-
-    static const size_t SLAB_SIZE = 1024;
-
     VM();
     
     Sym sym(const string &name);
@@ -50,7 +46,7 @@ namespace ampl {
     
     unordered_map<string, Sym> syms;
     Libs libs;
-    Ops ops;
+    vector<Op> ops;
     Stack stack;
   };
 }

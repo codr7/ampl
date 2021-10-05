@@ -16,7 +16,7 @@ namespace ampl {
     struct Goto {
       static const OpCode CODE = GOTO;      
 
-      Goto(Form form, PC pc): form(form), pc(pc) {}
+      Goto(const Form &form, PC pc): form(form), pc(pc) {}
       
       Form form;
       PC pc;
@@ -26,7 +26,9 @@ namespace ampl {
       static const OpCode CODE = PUSH;      
 
       template <typename T>
-      Push(Form form, const TType<T> &type, const T &data): form(form), val(type, data) {}
+      Push(const Form &form, const TType<T> &type, const T &data): form(form), val(type, data) {}
+
+      Push(const Form &form, const Val &val): form(form), val(val) {}
       
       Form form;
       Val val;

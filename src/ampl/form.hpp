@@ -2,9 +2,11 @@
 #define AMPL_FORM_HPP
 
 #include <deque>
+#include <optional>
 #include <ostream>
 
 #include "ampl/pos.hpp"
+#include "ampl/val.hpp"
 
 namespace ampl {
   using namespace std;
@@ -19,7 +21,10 @@ namespace ampl {
     void dump(const Form &self, const T &imp, ostream &out);
 
     template <typename T>
-    void emit(const Form &self, const T &imp, deque<Form> &in, VM &vm) {}
+    void emit(const Form &self, const T &imp, deque<Form> &in, VM &vm);
+
+    template <typename T>
+    optional<Val> val(const Form &self, const T &imp, VM &vm) { return nullopt; }
   }
 
   struct Form {
@@ -27,6 +32,7 @@ namespace ampl {
       virtual ~Imp() = default;
       virtual void dump(const Form& self, ostream& out) const = 0;
       virtual void emit(const Form &self, deque<Form> &in, VM &vm) const = 0;
+      virtual optional<Val> val(const Form &self, VM &vm) const = 0;
     };
 
     template <typename T>
@@ -40,7 +46,11 @@ namespace ampl {
       void emit(const Form& self, deque<Form> &in, VM &vm) const override {
 	forms::emit(self, imp, in, vm);
       }
-      
+
+      optional<Val> val(const Form &self, VM &vm) const override {
+	return forms::val(self, imp, vm);
+      }
+
       T imp;
     };
 
@@ -56,6 +66,18 @@ namespace ampl {
       return timp ? &timp->imp : nullptr;
     }
 
+    void dump(ostream &out) const {
+      imp->dump(*this, out);
+    }
+
+    void emit(deque<Form> &in, VM &vm) const {
+      imp->emit(*this, in, vm);
+    }
+
+    optional<Val> val(VM &vm) const{
+      return imp->val(*this, vm);
+    }
+    
     Pos pos;
     shared_ptr<const Imp> imp;
   };
