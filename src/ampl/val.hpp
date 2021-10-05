@@ -31,7 +31,7 @@ namespace ampl {
   ostream &operator <<(ostream &out, const Val &val);
 
   template <typename T>
-  TType<T>::TType(const Sym &name): Type(name) {
+  TType<T>::TType(const Sym &name, initializer_list<Type> parent_types): Type(name, parent_types) {
     methods.dump = [](const Val &val, ostream &out) { out << val.as<T>(); };
     methods.is_equal = [](const Val &x, const Val &y) { return x.as<T>() == y.as<T>(); };
   }

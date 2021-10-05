@@ -6,10 +6,11 @@
 
 namespace ampl::libs {
   ABC::ABC(VM &vm):
-    bool_type(vm.sym("Bool")),
-    int_type(vm.sym("Int")),
-    macro_type(vm.sym("Macro")),
-    stack_type(vm.sym("Stack")) {
+    any_type(vm.sym("Any")),
+    bool_type(vm.sym("Bool"), {any_type}),
+    int_type(vm.sym("Int"), {any_type}),
+    macro_type(vm.sym("Macro"), {any_type}),
+    stack_type(vm.sym("Stack"), {any_type}) {
     bool_type.methods.dump = [](auto &val, auto &out) { out << (val.template as<bool>() ? 'T' : 'F'); };
     bool_type.methods.is_true = [](auto &val) { return val.template as<bool>(); };
     int_type.methods.is_true = [](auto &val) { return val.template as<int>(); };

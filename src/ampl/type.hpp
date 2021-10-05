@@ -1,6 +1,7 @@
 #ifndef AMPL_TYPE_HPP
 #define AMPL_TYPE_HPP
 
+#include <array>
 #include <functional>
 #include "ampl/sym.hpp"
 
@@ -12,6 +13,7 @@ namespace ampl {
   
   struct Type {
     using Id = uint64_t;
+    static const Id MAX_COUNT = 64;
     static Id next_id;
     
     struct Methods {
@@ -20,16 +22,19 @@ namespace ampl {
       function<bool (const Val &val)> is_true;
     };
 
-    Type(const Sym &name);
+    Type(const Sym &name, initializer_list<Type> parent_types = {});
 
+    bool isa(const Type other) const { return parent_types[other.id]; }
+    
     Id id;
     Sym name;
     Methods methods;
+    array<bool, MAX_COUNT> parent_types;
   };
 
   template <typename T>
   struct TType: Type {
-    TType(const Sym &name); // Defined in val.hpp
+    TType(const Sym &name, initializer_list<Type> parent_types = {}); // Defined in val.hpp
   };
 
   bool operator==(const Type &lhs, const Type &rhs);

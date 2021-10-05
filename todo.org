@@ -1,9 +1,3 @@
-* add Type.isa
-** add parent_types
-*** add Type.MAX_COUNT
-**** check
-* add parent_type arg to Type/TType
-** add any_type
 * add func
 ** fixed size args/rets like Env::regs
 ** return pc from body

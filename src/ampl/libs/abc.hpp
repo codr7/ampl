@@ -21,6 +21,8 @@ namespace ampl::libs {
     
     ABC(VM &vm);
 
+    Type any_type;
+    
     BoolType bool_type;
     IntType int_type;
     MacroType macro_type;
