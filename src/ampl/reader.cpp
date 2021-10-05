@@ -21,7 +21,7 @@ namespace ampl {
   }
 
   optional<Form>read_id(istream &in, Pos &pos, VM &vm) {
-    Pos form_pos(pos);
+    Pos fpos(pos);
     char c = 0;
     stringstream buf;
     
@@ -32,10 +32,11 @@ namespace ampl {
       }
 
       buf << c;
+      pos.column++;
     }
 
     if (!buf.tellp()) { return nullopt; }
-    return Form(form_pos, forms::Id(vm.sym(buf.str())));
+    return Form(fpos, forms::Id(vm.sym(buf.str())));
   }
   
   optional<Form> read_ws(istream &in, Pos &pos, VM &vm) {
