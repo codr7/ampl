@@ -17,6 +17,6 @@ int main() {
   vm.emit<ops::Stop>();
   vm.eval(0);
 
-  cout << vm.stack << endl;
+  cout << vm.stack() << endl;
   return 0;
 }

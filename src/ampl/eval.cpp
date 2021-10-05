@@ -14,7 +14,7 @@
 namespace ampl {
 
   bool VM::eval(PC start_pc) {
-    static const void* dispatch[] = {&&BRANCH, &&GOTO, &&PUSH, &&STOP};
+    static const void* dispatch[] = {&&BRANCH, &&GOTO, &&LOAD, &&PUSH, &&STOP};
 
     PC pc = start_pc;
     Op *op = nullptr;
@@ -37,6 +37,19 @@ namespace ampl {
   GOTO: {
       TRACE(GOTO);
       DISPATCH(op->as<ops::Goto>().pc);
+    }
+
+  LOAD: {
+      TRACE(LOAD);
+
+      {
+	auto &load = op->as<ops::Load>();
+	auto v = proc().regs[load.reg];
+	if (!v) { throw EvalError(load.form.pos, "Nothing to load"); }
+	push(*v);
+      }
+      
+      DISPATCH(pc+1);
     }
 
   PUSH: {

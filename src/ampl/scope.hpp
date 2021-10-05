@@ -2,6 +2,7 @@
 #define AMPL_SCOPE_HPP
 
 #include <map>
+#include "ampl/ampl.hpp"
 #include "ampl/val.hpp"
 
 namespace ampl {
@@ -13,7 +14,7 @@ namespace ampl {
     Scope(optional<Scope> parent_scope = nullopt);
     optional<Val> find(const Sym &key) const;
     
-    uint64_t reg_count = 0;
+    Reg reg_count = 0;
     map<Sym, Val> bindings;
   };
 }

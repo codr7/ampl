@@ -10,7 +10,7 @@ namespace ampl {
   using namespace std;
 
   struct VM;
-  enum OpCode {BRANCH = 0, GOTO, PUSH, STOP};
+  enum OpCode {BRANCH = 0, GOTO, LOAD, PUSH, STOP};
 
   namespace ops {
     struct Branch {
@@ -30,7 +30,16 @@ namespace ampl {
       Form form;
       PC pc;
     };
+
+    struct Load {
+      static const OpCode CODE = LOAD;      
+
+      Load(const Form &form, Reg reg): form(form), reg(reg) {}
       
+      Form form;
+      Reg reg;
+    };
+
     struct Push {
       static const OpCode CODE = PUSH;      
 
@@ -59,7 +68,7 @@ namespace ampl {
     const T &as() const { return get<T>(data); }
 
     OpCode code;
-    variant<ops::Branch, ops::Goto, ops::Push, ops::Stop> data;
+    variant<ops::Branch, ops::Goto, ops::Load, ops::Push, ops::Stop> data;
   };
 }
 
