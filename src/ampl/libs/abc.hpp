@@ -1,6 +1,7 @@
 #ifndef AMPL_LIBS_ABC
 #define AMPL_LIBS_ABC
 
+#include "ampl/func.hpp"
 #include "ampl/lib.hpp"
 #include "ampl/macro.hpp"
 #include "ampl/stack.hpp"
@@ -15,6 +16,7 @@ namespace ampl::libs {
 
   struct ABC: Lib {
     using BoolType = TType<bool>;
+    using FuncType = TType<Func>;
     using IntType = TType<int>;
     using MacroType = TType<Macro>;
     using StackType = TType<Stack>;
@@ -24,6 +26,7 @@ namespace ampl::libs {
     Type any_type;
     
     BoolType bool_type;
+    FuncType func_type;
     IntType int_type;
     MacroType macro_type;
     StackType stack_type;

@@ -5,9 +5,10 @@
 #include <ostream>
 
 namespace ampl::libs {
-  ABC::ABC(VM &vm):
+  ABC::ABC(VM &vm): Lib(vm),
     any_type(vm.sym("Any")),
     bool_type(vm.sym("Bool"), {any_type}),
+    func_type(vm.sym("Func"), {any_type}),
     int_type(vm.sym("Int"), {any_type}),
     macro_type(vm.sym("Macro"), {any_type}),
     stack_type(vm.sym("Stack"), {any_type}) {

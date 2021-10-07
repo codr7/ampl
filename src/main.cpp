@@ -49,7 +49,7 @@ int main() {
   cout << "/>mpl v" << VERSION << endl;
 
   VM vm;
-  vm.libs.abc.import(vm);
+  vm.libs.abc.import();
   
   repl(vm, cin, cout);
   return 0;

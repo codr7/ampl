@@ -1,9 +1,8 @@
-* add func
-** fixed size args/rets like Env::regs
-** return pc from body
-* add frame
-** use std to copy regs prefix
 * add math lib
+** bind +/- funcs
+* add call op
+* add frame: env
+** use std to copy regs prefix
 * fib
 * add sym_type
 ** add quote reader
