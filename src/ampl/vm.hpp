@@ -46,12 +46,21 @@ namespace ampl {
       return s.back();
     }
 
-    Val *peek() {
+    Val &peek() {
       Stack &s = env().stack;
-      return s.empty() ? nullptr : &s.back();
+      assert(!s.empty());
+      return s.back();
     }
 
-    optional<Val> pop() {
+    Val pop() {
+      Stack &s = env().stack;
+      assert(!s.empty());
+      Val v = s.back();
+      s.pop_back();
+      return v;
+    }
+
+    optional<Val> try_pop() {
       Stack &s = env().stack;
       if (s.empty()) { return nullopt; }
       Val v = s.back();

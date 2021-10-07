@@ -29,7 +29,7 @@ namespace ampl {
       bool ok = false;
 
       {
-	auto v = pop();
+	auto v = try_pop();
 	if (!v) { throw EvalError(branch.form.pos, "Missing branch condition"); }
 	ok = v->is_true();
       }
@@ -99,7 +99,7 @@ namespace ampl {
       
       {
 	auto &store = op->as<ops::Store>();
-	auto v = pop();
+	auto v = try_pop();
 	if (!v) { throw EvalError(store.form.pos, "Stack is empty"); }
 	env().regs[store.reg] = v;
       }
