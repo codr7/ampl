@@ -20,24 +20,24 @@ namespace ampl::libs {
     bind(vm.sym("T"), bool_type, true);
     bind(vm.sym("F"), bool_type, false);
 
-    bind(vm.sym("="), macro_type, Macro(vm.sym("="), 2,
-					[](Macro &self, const Form &form, deque<Form> &in, VM &vm) {
-					  Form x = in.front();
-					  in.pop_front();
-					  optional<Val> xv = x.val(vm);
-					  if (!xv) { x.emit(in, vm); }
-					  
-					  Form y = in.front();
-					  in.pop_front();
-					  optional<Val> yv = y.val(vm);
-					  if (!yv) { y.emit(in, vm); }
-					  
-					  vm.emit<ops::Equal>(form, xv, yv);
-					}));
+    bind_macro(vm.sym("="), 2,
+	       [](Macro &self, const Form &form, deque<Form> &in, VM &vm) {
+		 Form x = in.front();
+		 in.pop_front();
+		 optional<Val> xv = x.val(vm);
+		 if (!xv) { x.emit(in, vm); }
+		 
+		 Form y = in.front();
+		 in.pop_front();
+		 optional<Val> yv = y.val(vm);
+		 if (!yv) { y.emit(in, vm); }
+		 
+		 vm.emit<ops::Equal>(form, xv, yv);
+	       });
 
-    bind(vm.sym("cp"), macro_type, Macro(vm.sym("cp"), 0,
-					 [](Macro &self, const Form &form, deque<Form> &in, VM &vm) {
-					   vm.emit<ops::Copy>(form);
-					 }));
+    bind_macro(vm.sym("cp"), 0,
+	       [](Macro &self, const Form &form, deque<Form> &in, VM &vm) {
+		 vm.emit<ops::Copy>(form);
+	       });
   }
 }

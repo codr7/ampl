@@ -50,6 +50,7 @@ int main() {
 
   VM vm;
   vm.libs.abc.import();
+  vm.libs.math.import();
   
   repl(vm, cin, cout);
   return 0;

@@ -1,5 +1,5 @@
-#ifndef AMPL_LIBS_ABC
-#define AMPL_LIBS_ABC
+#ifndef AMPL_LIBS_ABC_HPP
+#define AMPL_LIBS_ABC_HPP
 
 #include "ampl/func.hpp"
 #include "ampl/lib.hpp"

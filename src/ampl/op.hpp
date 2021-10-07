@@ -4,6 +4,7 @@
 #include <variant>
 #include "ampl/ampl.hpp"
 #include "ampl/form.hpp"
+#include "ampl/func.hpp"
 #include "ampl/val.hpp"
 
 namespace ampl {
@@ -11,7 +12,7 @@ namespace ampl {
 
   struct VM;
   enum OpCode {
-    BRANCH = 0, COPY, DROP, EQUAL, GOTO, LOAD, PUSH, STORE,
+    BRANCH = 0, CALL, COPY, DROP, EQUAL, GOTO, LOAD, PUSH, STORE,
     //---STOP---
     STOP};
 
@@ -23,6 +24,15 @@ namespace ampl {
       
       Form form;
       PC false_pc;
+    };
+
+    struct Call {
+      static const OpCode CODE = CALL;      
+
+      Call(const Form &form, const Func &target): form(form), target(target) {}
+      
+      Form form;
+      Func target;
     };
 
     struct Copy {
@@ -108,7 +118,7 @@ namespace ampl {
     const T &as() const { return get<T>(data); }
 
     OpCode code;
-    variant<ops::Branch, ops::Copy, ops::Drop, ops::Equal, ops::Goto, ops::Load, ops::Push, ops::Store,
+    variant<ops::Branch, ops::Call, ops::Copy, ops::Drop, ops::Equal, ops::Goto, ops::Load, ops::Push, ops::Store,
 	    //---STOP---
 	    ops::Stop> data;
   };

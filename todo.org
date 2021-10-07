@@ -1,8 +1,7 @@
-* add math lib
-** bind +/- funcs
-* add call op
 * add frame: env
 ** use std to copy regs prefix
+* add func prim
+* add math.</>
 * fib
 * add sym_type
 ** add quote reader

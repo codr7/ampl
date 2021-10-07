@@ -15,7 +15,7 @@ namespace ampl {
 
   bool VM::eval(PC start_pc) {
     static const void* dispatch[] = {
-      &&BRANCH, &&COPY, &&DROP, &&EQUAL, &&GOTO, &&LOAD, &&PUSH, &&STORE,
+      &&BRANCH, &&CALL, &&COPY, &&DROP, &&EQUAL, &&GOTO, &&LOAD, &&PUSH, &&STORE,
       //---STOP---
       &&STOP};
 
@@ -35,6 +35,17 @@ namespace ampl {
       }
       
       DISPATCH(ok ? pc+1 : branch.false_pc);
+    }
+
+  CALL: {
+      TRACE(CALL);
+      auto &call = op->as<ops::Call>();
+
+      if (!call.target.is_applicable(*this)) {
+	throw EvalError(call.form.pos, "Not applicable: ", call.target, '\n', stack());
+      }
+
+      DISPATCH(call.target.eval(call.form.pos, pc+1, *this));
     }
 
   COPY: {

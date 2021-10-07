@@ -12,7 +12,7 @@ $ cd build
 $ cmake ..
 $ make
 $ rlwrap ./ampl
-/>mpl v2
+/>mpl v3
 
 Press Return on empty line to evaluate.
 

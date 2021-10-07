@@ -23,11 +23,11 @@ namespace ampl {
     
     static Id next_id;
     
-    using Body = function<PC (Func &self, const Pos &pos, PC ret, VM &vm)>;
+    using Body = function<PC (Func &self, const Pos &pos, PC ret_pc, VM &vm)>;
 
     Func(const Sym &name, const vector<Arg> &args, const vector<Type> &rets, const Body &body);
-    PC call(const Pos &pos, PC ret, VM &vm);
-
+    bool is_applicable(VM &vm);
+    PC eval(const Pos &pos, PC ret_pc, VM &vm);
     
     Id id;
     Sym name;

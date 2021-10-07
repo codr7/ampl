@@ -5,6 +5,7 @@
 
 #include "ampl/ampl.hpp"
 #include "ampl/libs/abc.hpp"
+#include "ampl/libs/math.hpp"
 #include "ampl/stack.hpp"
 #include "ampl/op.hpp"
 #include "ampl/env.hpp"
@@ -18,8 +19,10 @@ namespace ampl {
     
   struct VM {
     struct Libs {
-      Libs(VM &vm): abc(vm) {}
+      Libs(VM &vm): abc(vm), math(vm) {}
+
       libs::ABC abc;
+      libs::Math math;
     };
     
     VM(): libs(*this) {

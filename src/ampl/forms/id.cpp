@@ -17,7 +17,23 @@ namespace ampl::forms {
       auto found = vm.scope.find(id.name);
       
       if (found) {
-	if (found->type == vm.libs.abc.macro_type) {
+	if (found->type == vm.libs.abc.func_type) {
+	  const Func &f = found->as<Func>();
+
+	  for (const Func::Arg &a: f.args) {
+	    Form af = in.front();
+	    optional<Val> v = af.val(vm);
+
+	    if (v && !v->type.isa(a.type)) {
+	      throw EmitError(af.pos, "Not applicable: ", a.type, ' ', v->type);
+	    }
+	    
+	    in.pop_front();
+	    af.emit(in, vm);
+	  }
+	  
+	  vm.emit<ops::Call>(form, f);
+	} else if (found->type == vm.libs.abc.macro_type) {
 	  found->as<Macro>().expand(form, in, vm);
 	} else {
 	  vm.emit<ops::Push>(form, *found);
