@@ -30,6 +30,8 @@ namespace ampl {
     }
 
     Pos fpos = pos;
+    pos.column++;
+    
     deque<Form> body;
     
     for (;;) {
@@ -48,6 +50,7 @@ namespace ampl {
     }
 
     if (c != ')') { throw ReadError(fpos, "Open group"); }
+    pos.column++;
     return Form(fpos, forms::Group(body));
   }
 

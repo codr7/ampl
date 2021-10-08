@@ -16,6 +16,8 @@ namespace ampl {
     string source;
     int line, column;
   };
+
+  ostream &operator <<(ostream &out, const Pos &pos);
 }
 
 #endif
