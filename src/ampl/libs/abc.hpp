@@ -19,6 +19,8 @@ namespace ampl::libs {
     using FuncType = TType<Func>;
     using IntType = TType<int>;
     using MacroType = TType<Macro>;
+    using MetaType = TType<Type>;
+    using RegType = TType<Reg>;
     using StackType = TType<Stack>;
     
     ABC(VM &vm);
@@ -29,6 +31,8 @@ namespace ampl::libs {
     FuncType func_type;
     IntType int_type;
     MacroType macro_type;
+    MetaType meta_type;
+    RegType reg_type;
     StackType stack_type;
   };
 }

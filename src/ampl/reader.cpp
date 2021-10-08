@@ -1,6 +1,7 @@
 #include <istream>
 #include <sstream>
 #include <vector>
+#include "ampl/forms/group.hpp"
 #include "ampl/forms/id.hpp"
 #include "ampl/forms/lit.hpp"
 #include "ampl/reader.hpp"
@@ -8,7 +9,7 @@
 
 namespace ampl {
   optional<Form> read_form(istream &in, Pos &pos, VM &vm) {
-    vector<Reader> readers {read_ws, read_int, read_id};
+    vector<Reader> readers {read_ws, read_int, read_group, read_id};
     optional<Form> f;
     
     for (Reader r: readers) {
@@ -18,13 +19,45 @@ namespace ampl {
     return f;
   }
 
+  optional<Form> read_group(istream &in, Pos &pos, VM &vm) {
+    char c = 0;
+    
+    if (!in.get(c)) { return nullopt; }
+
+    if (c != '(') {
+      if (c) { in.unget(); }
+      return nullopt;
+    }
+
+    Pos fpos = pos;
+    deque<Form> body;
+    
+    for (;;) {
+      read_ws(in, pos, vm);
+
+      if (in.get(c)) {
+	if (c == ')') { break; }
+	in.unget();
+      } else {
+	break;
+      }
+      
+      optional<Form> bf = read_form(in, pos, vm);
+      if (!bf) { break; }
+      body.push_back(*bf);
+    }
+
+    if (c != ')') { throw ReadError(fpos, "Open group"); }
+    return Form(fpos, forms::Group(body));
+  }
+
   optional<Form> read_id(istream &in, Pos &pos, VM &vm) {
     Pos fpos(pos);
     stringstream buf;
     char c = 0;
     
     while (in.get(c)) {
-      if (!isgraph(c)) {
+      if (!isgraph(c) || c == '(' || c == ')') {
 	in.unget();
 	break;
       }

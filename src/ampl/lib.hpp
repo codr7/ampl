@@ -20,8 +20,15 @@ namespace ampl {
       bindings.emplace(key, Val(type, data));
     }
 
-    void bind_macro(const Sym &name, uint8_t arg_count, const Macro::Body &body);
-    void bind_func(const Sym &name, const vector<Func::Arg> &args, const vector<Type> &rets, const Func::Body &body);
+    void bind(const Type &type);
+    
+    Macro bind_macro(const Sym &name, uint8_t arg_count, const Macro::Body &body);
+
+    Func bind_func(const Sym &name,
+		   const vector<Func::Arg> &args,
+		   const vector<Type> &rets,
+		   const Func::Body &body = nullptr);
+    
     void import();
     
     VM &vm;

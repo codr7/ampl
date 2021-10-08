@@ -9,7 +9,7 @@ namespace ampl::libs {
     bind_func(vm.sym("+"),
 	      {{vm.sym("x"), vm.libs.abc.int_type}, {vm.sym("y"), vm.libs.abc.int_type}},
 	      {vm.libs.abc.int_type},
-	      [](Func &self, const Pos &pos, PC ret_pc, VM &vm) {
+	      [](const Func &self, const Pos &pos, PC ret_pc, VM &vm) {
 		Val y = vm.pop(), &x = vm.peek();
 		x.as<int>() += y.as<int>();
 		return ret_pc;
@@ -18,7 +18,7 @@ namespace ampl::libs {
     bind_func(vm.sym("-"),
 	      {{vm.sym("x"), vm.libs.abc.int_type}, {vm.sym("y"), vm.libs.abc.int_type}},
 	      {vm.libs.abc.int_type},
-	      [](Func &self, const Pos &pos, PC ret_pc, VM &vm) {
+	      [](const Func &self, const Pos &pos, PC ret_pc, VM &vm) {
 		Val y = vm.pop(), &x = vm.peek();
 		x.as<int>() -= y.as<int>();
 		return ret_pc;

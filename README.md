@@ -51,3 +51,11 @@ Values are pushed on the stack in specified order.
 
 [1]
 ```
+
+### functions
+
+New functions may be defined using `func`.
+
+```
+  func foo () (Int) 42
+```

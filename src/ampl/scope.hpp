@@ -11,11 +11,23 @@ namespace ampl {
   struct Sym;
   
   struct Scope {
-    Scope(optional<Scope> parent_scope = nullopt);
+    Scope(VM &vm, optional<Scope> parent_scope = nullopt);
 
     void bind(const Sym &key, const Val &val);
-    optional<Val> find(const Sym &key) const;
+
+    template <typename T>
+    void bind(const Sym &key, const TType<T> &type, const T &data) {
+      bind(key, Val(type, data));
+    }
     
+    Reg bind(const Sym &key);
+    
+    Val &get(const Sym &key);
+    
+    optional<Val> find(const Sym &key) const;
+
+    VM &vm;
+    size_t index;
     Reg reg_count = 0;
     map<Sym, Val> bindings;
   };

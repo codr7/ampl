@@ -4,6 +4,7 @@
 #include <unordered_map>
 
 #include "ampl/ampl.hpp"
+#include "ampl/frame.hpp"
 #include "ampl/libs/abc.hpp"
 #include "ampl/libs/math.hpp"
 #include "ampl/stack.hpp"
@@ -26,6 +27,7 @@ namespace ampl {
     };
     
     VM(): libs(*this) {
+      scopes.emplace_back(*this);
       envs.emplace_back();
     }
     
@@ -36,6 +38,28 @@ namespace ampl {
       return i->second;
     }
 
+    Scope &push_scope() {
+      scopes.emplace_back(*this, scopes.back());
+      return scopes.back();
+    }
+
+    void pop_scope() { scopes.pop_back(); }
+
+    Scope &scope() { return scopes.back(); }
+    
+    void push_frame(const Func &target, PC ret_pc) {
+      frames.emplace_back(target, ret_pc, *this);
+      envs.push_back(frames.back());
+    }
+
+    Frame pop_frame() {
+      assert(!frames.empty());
+      envs.pop_back();
+      Frame f = frames.back();
+      frames.pop_back();
+      return f;
+    }
+    
     Val &push(const Val &val) {
       Stack &s = env().stack;
       s.push_back(val);
@@ -60,6 +84,15 @@ namespace ampl {
       assert(!s.empty());
       Val v = s.back();
       s.pop_back();
+      return v;
+    }
+
+    Val pop(size_t offset) {
+      Stack &s = env().stack;
+      assert(s.size() > offset);
+      auto i = next(s.begin(), s.size() - offset);
+      Val v = *i;
+      s.erase(i);
       return v;
     }
 
@@ -105,9 +138,10 @@ namespace ampl {
     
     unordered_map<string, Sym> syms;
     Libs libs;
-    Scope scope;
+    vector<Scope> scopes;
     vector<Op> ops;
     vector<Env> envs;
+    vector<Frame> frames;
   };
 }
 

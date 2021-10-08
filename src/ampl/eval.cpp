@@ -15,7 +15,7 @@ namespace ampl {
 
   bool VM::eval(PC start_pc) {
     static const void* dispatch[] = {
-      &&BRANCH, &&CALL, &&COPY, &&DROP, &&EQUAL, &&GOTO, &&LOAD, &&PUSH, &&STORE,
+      &&BRANCH, &&CALL, &&COPY, &&DROP, &&EQUAL, &&GOTO, &&LOAD, &&PUSH, &&RET, &&STORE,
       //---STOP---
       &&STOP};
 
@@ -105,14 +105,17 @@ namespace ampl {
       DISPATCH(pc+1);
     }
 
+  RET: {
+      TRACE(RET);
+      DISPATCH(pop_frame().ret(op->as<ops::Ret>().form.pos, *this));
+    }
+
   STORE: {
       TRACE(STORE);
       
       {
 	auto &store = op->as<ops::Store>();
-	auto v = try_pop();
-	if (!v) { throw EvalError(store.form.pos, "Stack is empty"); }
-	env().regs[store.reg] = v;
+	env().regs[store.reg] = pop(store.offset);
       }
       
       DISPATCH(pc+1);
