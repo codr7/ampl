@@ -34,7 +34,7 @@ namespace ampl {
 
   template <typename T>
   struct TType: Type {
-    TType(const Sym &name, initializer_list<Type> parent_types = {}); // Defined in val.hpp
+    TType(const Sym &name, initializer_list<Type> parent_types = {}): Type(name, parent_types) {}
   };
 
   bool operator==(const Type &lhs, const Type &rhs);

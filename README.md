@@ -12,7 +12,7 @@ $ cd build
 $ cmake ..
 $ make
 $ rlwrap ./ampl
-/>mpl v4
+/>mpl v5
 
 Press Return on empty line to evaluate.
 
@@ -36,7 +36,7 @@ New functions may be defined using `func`.
 ```
 
 ### branching
-`if` may be used to branch on a condition.
+`if` may be used to branch on a condition.<br/>
 All values boolean representations; most are true; but 0, empty strings etc. are false.
 
 ```

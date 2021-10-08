@@ -8,26 +8,36 @@
 
 namespace ampl::libs {
   ABC::ABC(VM &vm): Lib(vm),
-    any_type(vm.sym("Any")),
-    bool_type(vm.sym("Bool"), {any_type}),
-    func_type(vm.sym("Func"), {any_type}),
-    int_type(vm.sym("Int"), {any_type}),
-    macro_type(vm.sym("Macro"), {any_type}),
-    meta_type(vm.sym("Meta"), {any_type}),
-    reg_type(vm.sym("Reg"), {any_type}),
-    stack_type(vm.sym("Stack"), {any_type}) {
+		    any_type(vm.sym("Any")),
+		    bool_type(vm.sym("Bool"), {any_type}),
+		    form_type(vm.sym("Form"), {any_type}),
+		    func_type(vm.sym("Func"), {any_type}),
+		    int_type(vm.sym("Int"), {any_type}),
+		    macro_type(vm.sym("Macro"), {any_type}),
+		    meta_type(vm.sym("Meta"), {any_type}),
+		    reg_type(vm.sym("Reg"), {any_type}),
+		    stack_type(vm.sym("Stack"), {any_type}),
+		    sym_type(vm.sym("Sym"), {any_type}) {
     bool_type.methods.dump = [](auto &val, auto &out) { out << (val.template as<bool>() ? 'T' : 'F'); };
     bool_type.methods.is_true = [](auto &val) { return val.template as<bool>(); };
+    form_type.methods.dump = [](auto &val, auto &out) { val.template as<Form>().dump(out); };
+    form_type.methods.is_true = [](auto &val) { return true; };
+    int_type.methods.dump = [](auto &val, auto &out) { out << val.template as<int>(); };
     int_type.methods.is_true = [](auto &val) { return val.template as<int>(); };
+    stack_type.methods.dump = [](auto &val, auto &out) { out << val.template as<Stack>(); };
     stack_type.methods.is_true = [](auto &val) { return !val.template as<Stack>().empty(); };
+    sym_type.methods.dump = [](auto &val, auto &out) { out << '\'' << val.template as<Sym>().name; };
+    sym_type.methods.is_true = [](auto &val) { return true; };
 
     bind(any_type);
     bind(bool_type);
+    bind(form_type);
     bind(func_type);
     bind(int_type);
     bind(macro_type);
     bind(reg_type);
     bind(stack_type);
+    bind(sym_type);
     
     bind(vm.sym("T"), bool_type, true);
     bind(vm.sym("F"), bool_type, false);
@@ -104,7 +114,7 @@ namespace ampl::libs {
 		 vm.get(name).as<Func>().emit(body_form, in, vm);
 	       });
 
-       bind_macro(vm.sym("if"), 3,
+    bind_macro(vm.sym("if"), 3,
 	       [](const Macro &self, const Form &form, deque<Form> &in, VM &vm) {
 		 Form cond(in.front());
 		 in.pop_front();

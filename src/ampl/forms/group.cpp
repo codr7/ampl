@@ -20,4 +20,7 @@ namespace ampl::forms {
   void emit(const Form &form, const Group &group, deque<Form> &in, VM &vm) {
     vm.emit(group.body);
   }
+
+  template <>
+  Val quote(const Form &form, const Group &group, VM &vm) { return Val(vm.libs.abc.form_type, form); }
 }

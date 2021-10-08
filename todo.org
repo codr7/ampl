@@ -1,5 +1,3 @@
-* add sym_type
-** add quote reader
 * fib
 ** add math.</>
 *** add methods.compare

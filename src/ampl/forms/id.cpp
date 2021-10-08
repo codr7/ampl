@@ -45,5 +45,8 @@ namespace ampl::forms {
   }
 
   template <>
+  Val quote(const Form &form, const Id &id, VM &vm) { return Val(vm.libs.abc.sym_type, id.name); }
+
+  template <>
   optional<Val> val(const Form &form, const Id &id, VM &vm) { return vm.find(id.name); }
 }

@@ -9,7 +9,7 @@
 
 namespace ampl {
   optional<Form> read_form(istream &in, Pos &pos, VM &vm) {
-    vector<Reader> readers {read_ws, read_int, read_group, read_id};
+    vector<Reader> readers {read_ws, read_int, read_quote, read_group, read_id};
     optional<Form> f;
     
     for (Reader r: readers) {
@@ -107,7 +107,24 @@ namespace ampl {
     int v = read_int_base(in, pos, 10);
     return Form(fpos, forms::Lit(vm.libs.abc.int_type, v));
   }
-  
+
+  optional<Form> read_quote(istream &in, Pos &pos, VM &vm) {
+    char c = 0;
+    
+    if (!in.get(c)) { return nullopt; }
+
+    if (c != '\'') {
+      in.unget();
+      return nullopt;
+    }
+    
+    Pos fpos(pos);
+    pos.column++;
+    optional<Form> f = read_form(in, pos, vm);
+    if (!f) { throw ReadError(pos, "Missing quoted form"); } 
+    return Form(fpos, forms::Lit(f->quote(vm)));
+  }
+
   optional<Form> read_ws(istream &in, Pos &pos, VM &vm) {
     char c = 0;
     

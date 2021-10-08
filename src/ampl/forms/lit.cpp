@@ -13,5 +13,8 @@ namespace ampl::forms {
   }
 
   template <>
+  Val quote(const Form &form, const Lit &lit, VM &vm) { return lit.val; }
+
+  template <>
   optional<Val> val(const Form &form, const Lit &lit, VM &vm) { return lit.val; }
 }
