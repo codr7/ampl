@@ -53,7 +53,6 @@ Values are pushed on the stack in specified order.
 ```
 
 ### functions
-
 New functions may be defined using `func`.
 
 ```
@@ -63,4 +62,14 @@ New functions may be defined using `func`.
   foo
 
 [42]
+```
+
+### debugging
+Values may be dumped to `cout` using `dump`.
+
+```
+  dump 42
+
+42
+[]
 ```

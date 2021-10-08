@@ -57,6 +57,7 @@ namespace ampl::libs {
 	      {},
 	      [](const Func &self, const Pos &pos, PC ret_pc, VM &vm) {
 		vm.pop().dump(cout);
+		cout << endl;
 		return ret_pc;
 	      });
 
