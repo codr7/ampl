@@ -23,6 +23,28 @@ May the Source be with you!
 [42]
 ```
 
+### functions
+New functions may be defined using `func`.
+
+```
+  func foo () (Int) 42
+
+[]
+  foo
+
+[42]
+```
+
+### branching
+`if` may be used to branch on a condition.
+All values boolean representations; most are true; but 0, empty strings etc. are false.
+
+```
+  if 42 'yes 'no
+
+['yes]
+```
+
 ### the stack
 Values are pushed on the stack in specified order.
 
@@ -50,18 +72,6 @@ Values are pushed on the stack in specified order.
   d
 
 [1]
-```
-
-### functions
-New functions may be defined using `func`.
-
-```
-  func foo () (Int) 42
-
-[]
-  foo
-
-[42]
 ```
 
 ### debugging

@@ -46,6 +46,30 @@ namespace ampl {
     void pop_scope() { scopes.pop_back(); }
 
     Scope &scope() { return scopes.back(); }
+
+    optional<Val> find(const Sym &key) {
+      for (Scope *s = &scopes.back(); s >= &scopes.front(); s--) {
+	auto found = s->bindings.find(key);
+
+	if (found != s->bindings.end()) {
+	  return found->second;
+	}
+      }
+
+      return nullopt;
+    }
+
+    Val &get(const Sym &key) {
+      for (Scope *s = &scopes.back(); s >= &scopes.front(); s--) {
+	auto found = s->bindings.find(key);
+
+	if (found != s->bindings.end()) {
+	  return found->second;
+	}
+      }
+
+      assert(false);
+    }
     
     void push_frame(const Func &target, PC ret_pc) {
       frames.emplace_back(target, ret_pc, *this);

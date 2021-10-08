@@ -15,7 +15,9 @@ namespace ampl {
 
   bool VM::eval(PC start_pc) {
     static const void* dispatch[] = {
-      &&BRANCH, &&CALL, &&COPY, &&DROP, &&EQUAL, &&GOTO, &&LOAD, &&PUSH, &&RET, &&STORE,
+      &&BRANCH,
+      &&CALL, &&COPY,
+      &&DROP, &&EQUAL, &&GOTO, &&NOP, &&LOAD, &&PUSH, &&RET, &&STORE,
       //---STOP---
       &&STOP};
 
@@ -96,6 +98,11 @@ namespace ampl {
 	push(*v);
       }
       
+      DISPATCH(pc+1);
+    }
+
+  NOP: {
+      TRACE(NOP);
       DISPATCH(pc+1);
     }
 

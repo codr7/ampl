@@ -1,9 +1,9 @@
-* fib
-** add if prim
-** add math.</>
-*** add methods.compare
 * add sym_type
 ** add quote reader
+* fib
+** add math.</>
+*** add methods.compare
+* add bench macro
 * add string_type
 * eval func args/rets in macro
 

@@ -14,7 +14,7 @@ namespace ampl::forms {
     if (ids.find_first_not_of('d') == string::npos) {
       vm.emit<ops::Drop>(form, ids.length());
     } else {
-      auto found = vm.scope().find(id.name);
+      auto found = vm.find(id.name);
       
       if (found) {
 	if (found->type == vm.libs.abc.func_type) {
@@ -45,5 +45,5 @@ namespace ampl::forms {
   }
 
   template <>
-  optional<Val> val(const Form &form, const Id &id, VM &vm) { return vm.scope().find(id.name); }
+  optional<Val> val(const Form &form, const Id &id, VM &vm) { return vm.find(id.name); }
 }

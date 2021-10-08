@@ -71,11 +71,10 @@ namespace ampl::libs {
 		 in.pop_front();
 		 vector<Func::Arg> args;
 		 const deque<Form> &args_body = args_form.as<forms::Group>().body;
-		 Scope &scope = vm.scope();
 		 
 		 for (auto i = args_body.begin(); i != args_body.end(); i++) {
 		   Form name = *i++, type_form = *i;
-		   Val val(scope.get(type_form.as<forms::Id>().name));
+		   Val val(vm.get(type_form.as<forms::Id>().name));
 
 		   if (val.type != vm.libs.abc.meta_type) {
 		     throw EmitError(type_form.pos, "Invalid argument type: ", val.type);
@@ -89,7 +88,7 @@ namespace ampl::libs {
 		 vector<Type> rets;
 
 		 for (const Form &rf: rets_form.as<forms::Group>().body) {
-		   Val val(scope.get(rf.as<forms::Id>().name));
+		   Val val(vm.get(rf.as<forms::Id>().name));
 
 		   if (val.type != vm.libs.abc.meta_type) {
 		     throw EmitError(rf.pos, "Invalid return type: ", val.type);
@@ -102,7 +101,26 @@ namespace ampl::libs {
 		 in.pop_front();
 		 Func f(name, args, rets);
 		 vm.scope().bind(name, vm.libs.abc.func_type, f);
-		 vm.scope().get(name).as<Func>().emit(body_form, in, vm);
+		 vm.get(name).as<Func>().emit(body_form, in, vm);
 	       });
+
+       bind_macro(vm.sym("if"), 3,
+	       [](const Macro &self, const Form &form, deque<Form> &in, VM &vm) {
+		 Form cond(in.front());
+		 in.pop_front();
+		 cond.emit(in, vm);
+		 PC branch_pc = vm.pc();
+		 vm.emit<ops::Branch>(form);
+		 Form true_branch(in.front());
+		 in.pop_front();
+		 true_branch.emit(in, vm);
+		 PC skip_pc = vm.pc();
+		 vm.emit<ops::Goto>(form);
+		 vm.ops[branch_pc].as<ops::Branch>().false_pc = vm.pc();
+		 Form false_branch(in.front());
+		 in.pop_front();
+		 false_branch.emit(in, vm);
+		 vm.ops[skip_pc].as<ops::Goto>().pc = vm.pc();
+	       }); 
   }
 }

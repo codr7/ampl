@@ -22,12 +22,7 @@ namespace ampl {
     
     Reg bind(const Sym &key);
     
-    Val &get(const Sym &key);
-    
-    optional<Val> find(const Sym &key) const;
-
     VM &vm;
-    size_t index;
     Reg reg_count = 0;
     map<Sym, Val> bindings;
   };

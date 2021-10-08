@@ -14,7 +14,7 @@ namespace ampl {
 
   void Func::emit(const Form &body_form, deque<Form> &in, VM &vm) {
     PC skip_pc = vm.pc();
-    vm.emit<ops::Goto>(body_form, -1);
+    vm.emit<ops::Goto>(body_form);
     PC start_pc = vm.pc();
     Scope &scope = vm.push_scope();
     min_reg = max_reg = scope.reg_count;

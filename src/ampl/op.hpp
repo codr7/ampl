@@ -12,7 +12,7 @@ namespace ampl {
 
   struct VM;
   enum OpCode {
-    BRANCH = 0, CALL, COPY, DROP, EQUAL, GOTO, LOAD, PUSH, RET, STORE,
+    BRANCH = 0, CALL, COPY, DROP, EQUAL, GOTO, LOAD, NOP, PUSH, RET, STORE,
     //---STOP---
     STOP};
 
@@ -20,7 +20,7 @@ namespace ampl {
     struct Branch {
       static const OpCode CODE = BRANCH;      
 
-      Branch(const Form &form, PC false_pc): form(form), false_pc(false_pc) {}
+      Branch(const Form &form, PC false_pc = -1): form(form), false_pc(false_pc) {}
       
       Form form;
       PC false_pc;
@@ -64,7 +64,7 @@ namespace ampl {
     struct Goto {
       static const OpCode CODE = GOTO;      
 
-      Goto(const Form &form, PC pc): form(form), pc(pc) {}
+      Goto(const Form &form, PC pc = -1): form(form), pc(pc) {}
       
       Form form;
       PC pc;
@@ -77,6 +77,10 @@ namespace ampl {
       
       Form form;
       Reg reg;
+    };
+
+    struct Nop {
+      static const OpCode CODE = NOP;
     };
 
     struct Push {
@@ -129,7 +133,7 @@ namespace ampl {
     OpCode code;
     variant<ops::Branch,
 	    ops::Call, ops::Copy,
-	    ops::Drop, ops::Equal, ops::Goto, ops::Load, ops::Push, ops::Ret, ops::Store,
+	    ops::Drop, ops::Equal, ops::Goto, ops::Load, ops::Nop, ops::Push, ops::Ret, ops::Store,
 	    //---STOP---
 	    ops::Stop> data;
   };
