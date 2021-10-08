@@ -40,7 +40,7 @@ void repl(VM &vm, istream &in, ostream &out) {
        
        out << vm.stack() << endl;
      } else {
-       buf << " " << line;
+       buf << line << endl;
      }
    }
 }

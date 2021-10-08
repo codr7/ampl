@@ -25,7 +25,7 @@ namespace ampl {
     if (!in.get(c)) { return nullopt; }
 
     if (c != '(') {
-      if (c) { in.unget(); }
+      in.unget();
       return nullopt;
     }
 
