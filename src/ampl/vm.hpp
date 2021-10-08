@@ -49,15 +49,25 @@ namespace ampl {
     
     void push_frame(const Func &target, PC ret_pc) {
       frames.emplace_back(target, ret_pc, *this);
-      envs.push_back(frames.back());
     }
 
     Frame pop_frame() {
       assert(!frames.empty());
-      envs.pop_back();
       Frame f = frames.back();
       frames.pop_back();
       return f;
+    }
+
+    Env &push_env() {
+      envs.emplace_back();
+      return envs.back();
+    }
+
+    Env pop_env() {
+      assert(!envs.empty());
+      Env e(envs.back());
+      envs.pop_back();
+      return e;
     }
     
     Val &push(const Val &val) {

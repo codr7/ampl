@@ -12,7 +12,7 @@ $ cd build
 $ cmake ..
 $ make
 $ rlwrap ./ampl
-/>mpl v3
+/>mpl v4
 
 Press Return on empty line to evaluate.
 
@@ -58,4 +58,9 @@ New functions may be defined using `func`.
 
 ```
   func foo () (Int) 42
+
+[]
+  foo
+
+[42]
 ```

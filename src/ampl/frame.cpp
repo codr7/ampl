@@ -5,30 +5,33 @@
 
 namespace ampl {
   Frame::Frame(const Func &target, PC ret_pc, VM &vm): target(target), ret_pc(ret_pc) {
-    Env &env = vm.env();
+    vm.envs.reserve(vm.envs.size()+1);
+    Env &src = vm.env(), &dst = vm.push_env();
     
-    move(env.stack.begin() + env.stack.size() - target.args.size(),
-	 env.stack.end(),
-	 back_inserter(stack));
+    move(src.stack.begin() + src.stack.size() - target.args.size(),
+	 src.stack.end(),
+	 back_inserter(dst.stack));
     
-    copy(env.regs.begin(), env.regs.begin() + target.min_reg, regs.begin());
+    copy(src.regs.begin(), src.regs.begin() + target.min_reg, dst.regs.begin());
   }
 
   PC Frame::ret(const Pos &pos, VM &vm) {
+    Env src(vm.pop_env());
+    
     if (!target.rets.empty()) {
-      if (stack.size() < target.rets.size()) {
-	throw EvalError(pos, "Not enough return values: ", stack);
+      if (src.stack.size() < target.rets.size()) {
+	throw EvalError(pos, "Not enough return values: ", src.stack);
       }
       
-      Val *sv = &stack.back();
+      Val *sv = &src.stack.back();
       
       for (Type *rv = &target.rets.back(); rv >= &target.rets.front(); rv--, sv--) {
-	assert(sv >= &stack.front());
+	assert(sv >= &src.stack.front());
 	if (!sv->type.isa(*rv)) { throw EvalError(pos, "Wrong return type: ", *sv); }
       }
             
-      move(stack.begin() + stack.size() - target.rets.size(),
-	   stack.end(),
+      move(src.stack.begin() + src.stack.size() - target.rets.size(),
+	   src.stack.end(),
 	   back_inserter(vm.env().stack));
     }
     
