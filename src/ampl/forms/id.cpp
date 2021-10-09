@@ -11,7 +11,7 @@ namespace ampl::forms {
   
   template <>
   void emit(const Form &form, const Id &id, deque<Form> &in, VM &vm) {
-    const string &ids = id.name.name;
+    const string &ids = id.name.imp->name;
     
     if (ids.find_first_not_of('d') == string::npos) {
       vm.emit<ops::Drop>(form, ids.length());

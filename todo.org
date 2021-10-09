@@ -1,11 +1,14 @@
 * make Sym cheaper to copy
 ** add Imp/shared_ptr<const>
-* add d call flag
 * make Env cheaper to copy
+** push envs as unique_ptrs with new?
+*** use pool from alp commit history?
+* -- perf1
+* add d call flag
 * add inc/dec ops
 ** rewrite +/- calls with literal args
 * join consecutive store/load
-* --
+* -- perf2
 * add let macro
 * add iter
 * add for macro
@@ -18,4 +21,4 @@ func fib (n Int) (Int)
   if < n 2 n + fib - n 1 fib - n 2
 bench 100 (fib 20 d)
 
-1778
+1763

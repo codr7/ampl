@@ -13,10 +13,16 @@ namespace ampl {
     using Id = uint64_t;
     static Id next_id;
 
+    struct Imp {
+      Imp(const string_view &name);
+      
+      Id id;
+      string name;
+    };
+    
     Sym(const string_view &name);
 
-    Id id;
-    string name;
+    shared_ptr<const Imp> imp;
   };
 
   bool operator==(const Sym &lhs, const Sym &rhs);

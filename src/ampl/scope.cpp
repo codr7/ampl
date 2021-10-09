@@ -9,7 +9,7 @@ namespace ampl {
 
   void Scope::bind(const Sym &key, const Val &val) {
     auto found = bindings.find(key);
-    if (found != bindings.end()) { throw Error("Dup binding: ", key.name); }
+    if (found != bindings.end()) { throw Error("Dup binding: ", key.imp->name); }
     bindings.emplace(key, val);
   }
 

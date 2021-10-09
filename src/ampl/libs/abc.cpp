@@ -91,7 +91,7 @@ namespace ampl::libs {
     TType<Stack>(make_shared<const Imp>(name, parent_types)) {}
 
   SymType::Imp::Imp(const Sym &name, initializer_list<Type> parent_types): Type::Imp(name, parent_types) {
-    methods.dump = [](auto &val, auto &out) { out << '\'' << val.template as<Sym>().name; };
+    methods.dump = [](auto &val, auto &out) { out << '\'' << val.template as<Sym>(); };
 
     methods.compare = [](auto &x, auto &y) {
       const Sym &xv = x.template as<Sym>(), &yv = y.template as<Sym>();
