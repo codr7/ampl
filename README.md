@@ -26,37 +26,7 @@ May the Source be with you!
 [55]
 ```
 
-### functions
-New functions may be defined using `func`.
-
-```
-  func foo () (Int) 42
-
-[]
-  foo
-
-[42]
-```
-
-### branching
-`if` may be used to branch on a condition.<br/>
-All values boolean representations; most are true; but 0, empty strings etc. are false.
-
-```
-  if 42 'yes 'no
-
-['yes]
-```
-
 ### the stack
-Values are pushed on the stack in specified order.
-
-```
-  1 2 3
-  
-[1 2 3]
-```
-
 `cp` may be used to copy the top value.
 
 ```
@@ -77,7 +47,29 @@ Values are pushed on the stack in specified order.
 [1]
 ```
 
-### debugging
+### functions
+New functions may be defined using `func`.
+
+```
+  func foo () (Int) 42
+
+[]
+  foo
+
+[42]
+```
+
+### branches
+`if` may be used to branch on a condition.<br/>
+All values boolean representations; most are true; but 0, empty strings etc. are false.
+
+```
+  if 42 'yes 'no
+
+['yes]
+```
+
+### debugging tools
 Values may be dumped to `cout` using `dump`.
 
 ```
