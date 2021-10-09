@@ -12,11 +12,21 @@ namespace ampl {
 
   struct VM;
   enum OpCode {
-    BRANCH = 0, CALL, COPY, DROP, EQUAL, GOTO, LOAD, NOP, PUSH, RET, STORE,
+    BENCH = 0, BRANCH, CALL, COPY, DROP, EQUAL, GOTO, LOAD, NOP, PUSH, RET, STORE,
     //---STOP---
     STOP};
 
   namespace ops {
+    struct Bench {
+      static const OpCode CODE = BENCH;      
+
+      Bench(const Form &form, int reps, PC end_pc = -1): form(form), reps(reps), end_pc(end_pc) {}
+      
+      Form form;
+      int reps;
+      PC end_pc;
+    };
+
     struct Branch {
       static const OpCode CODE = BRANCH;      
 
@@ -131,7 +141,7 @@ namespace ampl {
     const T &as() const { return get<T>(data); }
 
     OpCode code;
-    variant<ops::Branch,
+    variant<ops::Bench, ops::Branch,
 	    ops::Call, ops::Copy,
 	    ops::Drop, ops::Equal, ops::Goto, ops::Load, ops::Nop, ops::Push, ops::Ret, ops::Store,
 	    //---STOP---

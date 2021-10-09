@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "ampl/error.hpp"
+#include "ampl/timer.hpp"
 #include "ampl/vm.hpp"
 
 #define DISPATCH(next_pc)				\
@@ -10,7 +11,7 @@ namespace ampl {
 
   bool VM::eval(PC start_pc) {
     static const void* dispatch[] = {
-      &&BRANCH,
+      &&BENCH, &&BRANCH,
       &&CALL, &&COPY,
       &&DROP, &&EQUAL, &&GOTO, &&LOAD, &&NOP, &&PUSH, &&RET, &&STORE,
       //---STOP---
@@ -20,6 +21,18 @@ namespace ampl {
     Op *op = nullptr;
     DISPATCH(pc);
 
+  BENCH: {
+      auto &bench = op->as<ops::Bench>();
+
+      {
+	Timer t;
+	for (int i = 0; i < bench.reps; i++) { eval(pc+1); }
+	push(libs.abc.int_type, (int)t.ms());
+      }
+      
+      DISPATCH(bench.end_pc);
+    }
+    
   BRANCH: {
       auto &branch = op->as<ops::Branch>();
       bool ok = false;

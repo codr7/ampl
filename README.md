@@ -26,7 +26,7 @@ May the Source be with you!
 [55]
 ```
 
-### the stack
+### stack tools
 `cp` may be used to copy the top value.
 
 ```
@@ -47,6 +47,16 @@ May the Source be with you!
 [1]
 ```
 
+### branches
+`if` may be used to branch on a condition.<br/>
+All values boolean representations; most are true; but 0, empty strings etc. are false.
+
+```
+  if 42 'yes 'no
+
+['yes]
+```
+
 ### functions
 New functions may be defined using `func`.
 
@@ -57,16 +67,6 @@ New functions may be defined using `func`.
   foo
 
 [42]
-```
-
-### branches
-`if` may be used to branch on a condition.<br/>
-All values boolean representations; most are true; but 0, empty strings etc. are false.
-
-```
-  if 42 'yes 'no
-
-['yes]
 ```
 
 ### debugging tools

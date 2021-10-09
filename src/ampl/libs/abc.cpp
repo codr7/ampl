@@ -120,7 +120,21 @@ namespace ampl::libs {
 		 
 		 vm.emit<ops::Equal>(form, xv, yv);
 	       });
+    
+    bind_macro(vm.sym("bench"), 2,
+	       [](const Macro &self, const Form &form, deque<Form> &in, VM &vm) {
+		 Form reps_form(in.front());
+		 in.pop_front();
+		 Form body_form(in.front());
+		 in.pop_front();
 
+		 PC op_pc = vm.pc();
+		 vm.emit<ops::Bench>(form, reps_form.val(vm)->as<int>());
+		 body_form.emit(in, vm);
+		 vm.emit<ops::Stop>();
+		 vm.ops[op_pc].as<ops::Bench>().end_pc = vm.pc();
+	       });
+    
     bind_macro(vm.sym("cp"), 0,
 	       [](const Macro &self, const Form &form, deque<Form> &in, VM &vm) {
 		 vm.emit<ops::Copy>(form);
