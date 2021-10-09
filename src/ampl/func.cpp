@@ -36,12 +36,13 @@ namespace ampl {
   
   bool Func::is_applicable(VM &vm) const {
     if (!imp->args.empty()) {
-      Stack &s(vm.stack());
+      const Stack &s(vm.stack());
       if (s.empty()) { return false; }
-      Val *sv = &s.back();
+      const Val *sv = &s.back(), *min_sv = &s.front();
+      const Arg *min_av = &imp->args.front();
       
-      for (const Arg *av = &imp->args.back(); av >= &imp->args.front(); av--, sv--) {
-	if (sv < &s.front() || !sv->type.isa(av->type)) { return false; }
+      for (const Arg *av = &imp->args.back(); av >= min_av; av--, sv--) {
+	if (sv < min_sv || !sv->type.isa(av->type)) { return false; }
       }
     }
     
