@@ -110,7 +110,7 @@ namespace ampl {
     Val pop() {
       Stack &s = env().stack;
       assert(!s.empty());
-      Val v = s.back();
+      Val v(move(s.back()));
       s.pop_back();
       return v;
     }
@@ -119,7 +119,7 @@ namespace ampl {
       Stack &s = env().stack;
       assert(offset < s.size());
       auto i = next(s.begin(), s.size() - offset - 1);
-      Val v = *i;
+      Val v(move(*i));
       s.erase(i);
       return v;
     }
@@ -127,7 +127,7 @@ namespace ampl {
     optional<Val> try_pop() {
       Stack &s = env().stack;
       if (s.empty()) { return nullopt; }
-      Val v = s.back();
+      Val v(move(s.back()));
       s.pop_back();
       return v;
     }
