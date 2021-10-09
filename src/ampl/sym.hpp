@@ -21,7 +21,6 @@ namespace ampl {
     };
     
     Sym(const string_view &name);
-
     shared_ptr<const Imp> imp;
   };
 

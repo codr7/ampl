@@ -221,7 +221,7 @@ namespace ampl::libs {
 		 Scope &dscope = vm.scope();
 		 Func f(name, args, rets, start_pc, dscope.reg_count);
 		 dscope.bind(name, vm.libs.abc.func_type, f);
-		 Scope &scope = vm.push_scope();
+		 Scope &scope = vm.push_scope(dscope);
 		 
 		 if (!f.imp->args.empty()) {
 		   int offset = 0;

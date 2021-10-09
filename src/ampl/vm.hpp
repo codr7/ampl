@@ -27,8 +27,8 @@ namespace ampl {
     };
     
     VM(): libs(*this) {
-      scopes.emplace_back(*this);
-      envs.emplace_back();
+      push_scope();
+      push_env();
     }
     
     Sym sym(const string &name) {
@@ -38,8 +38,8 @@ namespace ampl {
       return i->second;
     }
 
-    Scope &push_scope() {
-      scopes.emplace_back(*this, scopes.back());
+    Scope &push_scope(optional<Scope> parent_scope = nullopt) {
+      scopes.emplace_back(*this, parent_scope);
       return scopes.back();
     }
 
@@ -77,13 +77,13 @@ namespace ampl {
     }
 
     Env &push_env() {
-      envs.emplace_back();
-      return envs.back();
+      envs.emplace_back(make_unique<Env>());
+      return *envs.back().get();
     }
 
-    Env pop_env() {
+    unique_ptr<Env> pop_env() {
       assert(!envs.empty());
-      Env e(envs.back());
+      unique_ptr<Env> e(envs.back().release());
       envs.pop_back();
       return e;
     }
@@ -160,7 +160,10 @@ namespace ampl {
     
     bool eval(PC start_pc);
 
-    Env &env() { return envs.back(); }
+    Env &env() {
+      assert(!envs.empty());
+      return *envs.back().get();
+    }
 
     Stack &stack() { return env().stack; }
     
@@ -168,7 +171,7 @@ namespace ampl {
     Libs libs;
     vector<Scope> scopes;
     vector<Op> ops;
-    vector<Env> envs;
+    vector<unique_ptr<Env>> envs;
     vector<Frame> frames;
   };
 }

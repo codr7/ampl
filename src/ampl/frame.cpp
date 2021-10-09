@@ -15,21 +15,21 @@ namespace ampl {
   }
 
   PC Frame::ret(const Pos &pos, VM &vm) {
-    Env src(vm.pop_env());
+    unique_ptr<Env> src(vm.pop_env());
     
     if (!target.imp->rets.empty()) {
-      if (src.stack.size() < target.imp->rets.size()) {
-	throw EvalError(pos, "Not enough return values: ", src.stack);
+      if (src->stack.size() < target.imp->rets.size()) {
+	throw EvalError(pos, "Not enough return values: ", src->stack);
       }
       
-      Val *sv = &src.stack.back();
+      Val *sv = &src->stack.back();
       
       for (const Type *rv = &target.imp->rets.back(); rv >= &target.imp->rets.front(); rv--, sv--) {
-	assert(sv >= &src.stack.front());
+	assert(sv >= &src->stack.front());
 	if (!sv->type.isa(*rv)) { throw EvalError(pos, "Wrong return type: ", *sv); }
       }
 
-      auto i = src.stack.begin() + src.stack.size() - target.imp->rets.size(), j = src.stack.end();
+      auto i = src->stack.begin() + src->stack.size() - target.imp->rets.size(), j = src->stack.end();
       move(i, j, back_inserter(vm.env().stack));
     }
     
