@@ -50,10 +50,7 @@ namespace ampl {
     optional<Val> find(const Sym &key) {
       for (Scope *s = &scopes.back(); s >= &scopes.front(); s--) {
 	auto found = s->bindings.find(key);
-
-	if (found != s->bindings.end()) {
-	  return found->second;
-	}
+	if (found != s->bindings.end()) { return found->second; }
       }
 
       return nullopt;
@@ -62,10 +59,7 @@ namespace ampl {
     Val &get(const Sym &key) {
       for (Scope *s = &scopes.back(); s >= &scopes.front(); s--) {
 	auto found = s->bindings.find(key);
-
-	if (found != s->bindings.end()) {
-	  return found->second;
-	}
+	if (found != s->bindings.end()) { return found->second; }
       }
 
       assert(false);
@@ -123,8 +117,8 @@ namespace ampl {
 
     Val pop(size_t offset) {
       Stack &s = env().stack;
-      assert(s.size() > offset);
-      auto i = next(s.begin(), s.size() - offset);
+      assert(offset < s.size());
+      auto i = next(s.begin(), s.size() - offset - 1);
       Val v = *i;
       s.erase(i);
       return v;

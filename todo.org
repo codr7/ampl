@@ -1,9 +1,3 @@
-* fib
-** add math.</>
-*** add methods.compare
 * add bench macro
 * add string_type
 * eval func args/rets in macro
-
-func fibr (n Int) (Int) 
-  if < n 2 n + fibr - n 1 fibr - n 2

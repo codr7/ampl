@@ -3,8 +3,14 @@
 #include "ampl/vm.hpp"
 
 namespace ampl {
+  Order Val::compare(const Val &other) const {
+    if (type != other.type) { return ampl::compare(type.name, other.type.name); }
+    assert(type.methods.compare);
+    return type.methods.compare(*this, other);
+  }
+  
   void Val::dump(ostream &out) const {
-    assert(type.methods.dump);
+    if (!type.methods.dump) { throw Error("Dump not implemented: ", type.name); }
     type.methods.dump(*this, out);
   }
 
@@ -20,6 +26,10 @@ namespace ampl {
     return is_equal(lhs, rhs);
   }
 
+  bool operator!=(const Val &lhs, const Val &rhs) {
+    return !(lhs == rhs);
+  }
+  
   ostream &operator <<(ostream &out, const Val &val) {
     val.dump(out);
     return out;

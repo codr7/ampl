@@ -23,5 +23,23 @@ namespace ampl::libs {
 		x.as<int>() -= y.as<int>();
 		return ret_pc;
 	      });
+
+    bind_func(vm.sym("<"),
+	      {{vm.sym("x"), vm.libs.abc.int_type}, {vm.sym("y"), vm.libs.abc.int_type}},
+	      {vm.libs.abc.int_type},
+	      [](const Func &self, const Pos &pos, PC ret_pc, VM &vm) {
+		Val y = vm.pop(), &x = vm.peek();
+		x = Val(vm.libs.abc.bool_type, x.compare(y) == LT);
+		return ret_pc;
+	      });
+
+    bind_func(vm.sym(">"),
+	      {{vm.sym("x"), vm.libs.abc.int_type}, {vm.sym("y"), vm.libs.abc.int_type}},
+	      {vm.libs.abc.int_type},
+	      [](const Func &self, const Pos &pos, PC ret_pc, VM &vm) {
+		Val y = vm.pop(), &x = vm.peek();
+		x = Val(vm.libs.abc.bool_type, x.compare(y) == GT);
+		return ret_pc;
+	      });
   }
 }

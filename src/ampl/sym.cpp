@@ -13,4 +13,11 @@ namespace ampl {
     out << val.name;
     return out;
   }
+
+  template <>
+  Order compare(const Sym &x, const Sym &y) {
+    int res = x.name.compare(y.name);
+    if (res < 0) { return LT; }
+    return (res == 0) ? EQ : GT;
+  }
 }

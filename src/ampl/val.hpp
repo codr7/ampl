@@ -19,15 +19,18 @@ namespace ampl {
     template <typename T>
     const T &as() const { return any_cast<const T &>(data); }
 
+    Order compare(const Val &other) const;
+
     void dump(ostream &out) const;
 
     bool is_true() const;
-    
+
     Type type;
     any data;
   };
 
   bool operator==(const Val &lhs, const Val &rhs);
+  bool operator!=(const Val &lhs, const Val &rhs);
   ostream &operator <<(ostream &out, const Val &val);
 }
 

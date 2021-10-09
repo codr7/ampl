@@ -18,9 +18,12 @@ Press Return on empty line to evaluate.
 
 May the Source be with you!
 
-  42
+  func fib (n Int) (Int) 
+    if < n 2 n + fib - n 1 fib - n 2
 
-[42]
+  fib 10
+  
+[55]
 ```
 
 ### functions

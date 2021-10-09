@@ -16,6 +16,12 @@ namespace ampl {
     PC skip_pc = vm.pc();
     vm.emit<ops::Goto>(body_form);
     PC start_pc = vm.pc();
+
+    body = [start_pc](const Func &self, const Pos &pos, PC ret_pc, VM &vm) {
+      vm.push_frame(self, ret_pc);
+      return start_pc;
+    };
+
     Scope &scope = vm.push_scope();
     min_reg = max_reg = scope.reg_count;
 
@@ -30,27 +36,21 @@ namespace ampl {
 	}
       }
     }
-    
+
     body_form.emit(in, vm);
     vm.pop_scope();
     vm.emit<ops::Ret>(body_form);
-    vm.ops[skip_pc].as<ops::Goto>().pc = vm.pc();		 
-    
-    body = [start_pc](const Func &self, const Pos &pos, PC ret_pc, VM &vm) {
-      vm.push_frame(self, ret_pc);
-      return start_pc;
-    };
+    vm.ops[skip_pc].as<ops::Goto>().pc = vm.pc();
   }
 
   bool Func::is_applicable(VM &vm) const {
     if (!args.empty()) {
       Stack &s(vm.stack());
-      assert(!s.empty());
+      if (s.empty()) { return false; }
       Val *sv = &s.back();
       
       for (const Arg *av = &args.back(); av >= &args.front(); av--, sv--) {
-	assert(sv >= &s.front());
-	if (!sv->type.isa(av->type)) { return false; }
+	if (sv < &s.front() || !sv->type.isa(av->type)) { return false; }
       }
     }
     

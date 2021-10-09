@@ -18,6 +18,7 @@ namespace ampl {
     
     struct Methods {
       function<void (const Val &val, ostream &out)> dump;
+      function<Order (const Val &x, const Val &y)> compare;
       function<bool (const Val &x, const Val &y)> is_equal;
       function<bool (const Val &val)> is_true;
     };

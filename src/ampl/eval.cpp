@@ -1,12 +1,7 @@
+#include <iostream>
+
 #include "ampl/error.hpp"
 #include "ampl/vm.hpp"
-
-/*
-  #define TRACE(name)						\
-  cout << #name << endl;						\
-*/
-
-#define TRACE(name)
 
 #define DISPATCH(next_pc)				\
   goto *dispatch[(op = &ops[(pc = (next_pc))])->code];
@@ -17,7 +12,7 @@ namespace ampl {
     static const void* dispatch[] = {
       &&BRANCH,
       &&CALL, &&COPY,
-      &&DROP, &&EQUAL, &&GOTO, &&NOP, &&LOAD, &&PUSH, &&RET, &&STORE,
+      &&DROP, &&EQUAL, &&GOTO, &&LOAD, &&NOP, &&PUSH, &&RET, &&STORE,
       //---STOP---
       &&STOP};
 
@@ -26,7 +21,6 @@ namespace ampl {
     DISPATCH(pc);
 
   BRANCH: {
-      TRACE(BRANCH);
       auto &branch = op->as<ops::Branch>();
       bool ok = false;
 
@@ -40,7 +34,6 @@ namespace ampl {
     }
 
   CALL: {
-      TRACE(CALL);
       auto &call = op->as<ops::Call>();
 
       if (!call.target.is_applicable(*this)) {
@@ -51,8 +44,6 @@ namespace ampl {
     }
 
   COPY: {
-      TRACE(COPY);
-
       {
 	auto &copy = op->as<ops::Copy>();
 	auto &s = stack();
@@ -65,14 +56,11 @@ namespace ampl {
     }
 
   DROP: {
-      TRACE(DROP);
       drop(op->as<ops::Drop>().count);
       DISPATCH(pc+1);
     }
 
   EQUAL: {
-      TRACE(EQUAL);
-
       {
 	auto &equal = op->as<ops::Equal>();
 	optional<Val> y(equal.y ? equal.y : pop()), x(equal.x ? equal.x : pop());
@@ -84,13 +72,10 @@ namespace ampl {
     }
 
   GOTO: {
-      TRACE(GOTO);
       DISPATCH(op->as<ops::Goto>().pc);
     }
 
   LOAD: {
-      TRACE(LOAD);
-
       {
 	auto &load = op->as<ops::Load>();
 	auto v = env().regs[load.reg];
@@ -102,24 +87,19 @@ namespace ampl {
     }
 
   NOP: {
-      TRACE(NOP);
       DISPATCH(pc+1);
     }
 
   PUSH: {
-      TRACE(PUSH);
       push(op->as<ops::Push>().val);
       DISPATCH(pc+1);
     }
 
   RET: {
-      TRACE(RET);
       DISPATCH(pop_frame().ret(op->as<ops::Ret>().form.pos, *this));
     }
 
   STORE: {
-      TRACE(STORE);
-      
       {
 	auto &store = op->as<ops::Store>();
 	env().regs[store.reg] = pop(store.offset);
@@ -130,10 +110,8 @@ namespace ampl {
 
     //---STOP---
 
-  STOP: {
-      TRACE(STOP);
-    }
-  
+  STOP: {}
+    
     return true;
   }
 

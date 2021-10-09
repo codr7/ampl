@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "ampl/forms/id.hpp"
 #include "ampl/vm.hpp"
 
@@ -20,14 +22,8 @@ namespace ampl::forms {
 	if (found->type == vm.libs.abc.func_type) {
 	  const Func &f = found->as<Func>();
 
-	  for (const Func::Arg &a: f.args) {
+	  for (const Func::Arg &a [[maybe_unused]]: f.args) {
 	    Form af = in.front();
-	    optional<Val> v = af.val(vm);
-
-	    if (v && !v->type.isa(a.type)) {
-	      throw EmitError(af.pos, "Not applicable: ", a.type, ' ', v->type);
-	    }
-	    
 	    in.pop_front();
 	    af.emit(in, vm);
 	  }
@@ -35,6 +31,8 @@ namespace ampl::forms {
 	  vm.emit<ops::Call>(form, f);
 	} else if (found->type == vm.libs.abc.macro_type) {
 	  found->as<Macro>().expand(form, in, vm);
+	} else if (found->type == vm.libs.abc.reg_type) {
+	  vm.emit<ops::Load>(form, found->as<Reg>());
 	} else {
 	  vm.emit<ops::Push>(form, *found);
 	}
@@ -48,5 +46,9 @@ namespace ampl::forms {
   Val quote(const Form &form, const Id &id, VM &vm) { return Val(vm.libs.abc.sym_type, id.name); }
 
   template <>
-  optional<Val> val(const Form &form, const Id &id, VM &vm) { return vm.find(id.name); }
+  optional<Val> val(const Form &form, const Id &id, VM &vm) {
+    optional<Val> v = vm.find(id.name);
+    if (v && v->type == vm.libs.abc.reg_type) { return nullopt; }
+    return v;
+  }
 }

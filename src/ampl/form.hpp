@@ -93,6 +93,8 @@ namespace ampl {
     Pos pos;
     shared_ptr<const Imp> imp;
   };
+
+  ostream &operator <<(ostream &out, const Form &form);
 }
 
 #endif

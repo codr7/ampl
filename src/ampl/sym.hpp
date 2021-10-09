@@ -4,6 +4,8 @@
 #include <ostream>
 #include <string>
 
+#include "ampl/compare.hpp"
+
 namespace ampl {
   using namespace std;
   
@@ -21,6 +23,9 @@ namespace ampl {
   bool operator<(const Sym &lhs, const Sym &rhs);
 
   ostream &operator <<(ostream &out, const Sym &val);
+
+  template <>
+  Order compare(const Sym &x, const Sym &y);
 }
 
 #endif

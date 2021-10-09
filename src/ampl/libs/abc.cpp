@@ -19,14 +19,78 @@ namespace ampl::libs {
 		    stack_type(vm.sym("Stack"), {any_type}),
 		    sym_type(vm.sym("Sym"), {any_type}) {
     bool_type.methods.dump = [](auto &val, auto &out) { out << (val.template as<bool>() ? 'T' : 'F'); };
+
+    bool_type.methods.compare = [](auto &x, auto &y) {
+      bool xv = x.template as<bool>(), yv = y.template as<bool>();
+      if (!xv && yv) { return LT; }
+      if (xv && !yv) { return GT; }
+      return EQ;
+    };
+
+    bool_type.methods.is_equal = [](auto &x, auto &y) {
+      bool xv = x.template as<bool>(), yv = y.template as<bool>();
+      return xv == yv;
+    };
+      
     bool_type.methods.is_true = [](auto &val) { return val.template as<bool>(); };
+
     form_type.methods.dump = [](auto &val, auto &out) { val.template as<Form>().dump(out); };
     form_type.methods.is_true = [](auto &val) { return true; };
+
     int_type.methods.dump = [](auto &val, auto &out) { out << val.template as<int>(); };
+
+    int_type.methods.compare = [](auto &x, auto &y) {
+      int xv = x.template as<int>(), yv = y.template as<int>();
+      if (xv < yv) { return LT; }
+      return (xv == yv) ? EQ : GT;
+    };
+
+    int_type.methods.is_equal = [](auto &x, auto &y) {
+      int xv = x.template as<int>(), yv = y.template as<int>();
+      return xv == yv;
+    };
+
     int_type.methods.is_true = [](auto &val) { return val.template as<int>(); };
     stack_type.methods.dump = [](auto &val, auto &out) { out << val.template as<Stack>(); };
+
+    stack_type.methods.compare = [](auto &x, auto &y) {
+      const Stack &xs = x.template as<Stack>(), &ys = y.template as<Stack>();
+      for (auto xi = xs.begin(), yi = ys.begin();; xi++, yi++) {
+	if (xi == xs.end() && yi != ys.end()) { return LT; }
+	if (xi != xs.end() && yi == ys.end()) { return GT; }
+	if (xi == xs.end() && yi == ys.end()) { break; }
+
+	Order result = xi->compare(*yi);
+	if (result != EQ) { return result; }
+      }
+
+      return EQ;
+    };
+
+    stack_type.methods.is_equal = [](auto &x, auto &y) {
+      const Stack &xs = x.template as<Stack>(), &ys = y.template as<Stack>();
+      if (xs.size() != ys.size()) { return false; }
+
+      for (auto xi = xs.begin(), yi = ys.begin(); xi != xs.end(); xi++, yi++) {
+	if (*xi != *yi) { return false; }
+      }
+
+      return true;
+    };
+
     stack_type.methods.is_true = [](auto &val) { return !val.template as<Stack>().empty(); };
     sym_type.methods.dump = [](auto &val, auto &out) { out << '\'' << val.template as<Sym>().name; };
+
+    sym_type.methods.compare = [](auto &x, auto &y) {
+      const Sym &xv = x.template as<Sym>(), &yv = y.template as<Sym>();
+      return compare(xv, yv);
+    };
+
+    sym_type.methods.is_equal = [](auto &x, auto &y) {
+      Sym xv = x.template as<Sym>(), yv = y.template as<Sym>();
+      return xv == yv;
+    };
+
     sym_type.methods.is_true = [](auto &val) { return true; };
 
     bind(any_type);
@@ -109,8 +173,7 @@ namespace ampl::libs {
 		 
 		 Form body_form = in.front();
 		 in.pop_front();
-		 Func f(name, args, rets);
-		 vm.scope().bind(name, vm.libs.abc.func_type, f);
+		 vm.scope().bind(name, vm.libs.abc.func_type, Func(name, args, rets));
 		 vm.get(name).as<Func>().emit(body_form, in, vm);
 	       });
 
