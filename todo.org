@@ -17,4 +17,4 @@ func fib (n Int) (Int)
   if < n 2 n + fib - n 1 fib - n 2
 bench 100 (fib 20 d)
 
-1492
+1466

@@ -71,7 +71,7 @@ namespace ampl {
 
     Frame pop_frame() {
       assert(!frames.empty());
-      Frame f = frames.back();
+      Frame f(move(frames.back()));
       frames.pop_back();
       return f;
     }
