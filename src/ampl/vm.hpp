@@ -152,7 +152,7 @@ namespace ampl {
       deque<Form> tmp(in);
 
       while (!tmp.empty()) {
-	Form f = tmp.front();
+	Form f(move(tmp.front()));
 	tmp.pop_front();
 	f.emit(tmp, *this);
       }

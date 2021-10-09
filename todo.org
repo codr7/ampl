@@ -1,4 +1,5 @@
 * use unique_ptr for vm.frames like envs
+* use move
 * -- perf1
 * add d call flag
 * add inc/dec ops
