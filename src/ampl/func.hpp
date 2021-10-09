@@ -13,7 +13,9 @@ namespace ampl {
   struct Form;
   struct Pos;
   struct VM;
-  
+
+  enum CallFlags { CALL_CHECK = 1 };
+
   struct Func {
     using Id = uint64_t;
 

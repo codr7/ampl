@@ -35,14 +35,17 @@ namespace ampl {
       Form form;
       PC false_pc;
     };
-
+    
     struct Call {
       static const OpCode CODE = CALL;      
 
-      Call(const Form &form, const Func &target): form(form), target(target) {}
+      Call(const Form &form, const Func &target, CallFlags flags = CALL_CHECK): form(form), target(target), flags(flags) {
+	if ((flags & CALL_CHECK) && target.imp->args.empty()) { flags = CallFlags(flags ^ CALL_CHECK); }
+      }
       
       Form form;
       Func target;
+      CallFlags flags;
     };
 
     struct Copy {

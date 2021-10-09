@@ -49,7 +49,7 @@ namespace ampl {
   CALL: {
       auto &call = op->as<ops::Call>();
 
-      if (!call.target.is_applicable(*this)) {
+      if ((call.flags & CALL_CHECK) && !call.target.is_applicable(*this)) {
 	throw EvalError(call.form.pos, "Not applicable: ", call.target, '\n', stack());
       }
 

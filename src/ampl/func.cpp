@@ -35,15 +35,13 @@ namespace ampl {
     imp(make_shared<const Imp>(*this, name, args, rets, start_pc, min_reg)) {}
   
   bool Func::is_applicable(VM &vm) const {
-    if (!imp->args.empty()) {
-      const Stack &s(vm.stack());
-      if (s.empty()) { return false; }
-      const Val *sv = &s.back(), *min_sv = &s.front();
-      const Arg *min_av = &imp->args.front();
-      
-      for (const Arg *av = &imp->args.back(); av >= min_av; av--, sv--) {
-	if (sv < min_sv || !sv->type.isa(av->type)) { return false; }
-      }
+    const Stack &s(vm.stack());
+    if (s.empty()) { return false; }
+    const Val *sv = &s.back(), *min_sv = &s.front();
+    const Arg *min_av = &imp->args.front();
+    
+    for (const Arg *av = &imp->args.back(); av >= min_av; av--, sv--) {
+      if (sv < min_sv || !sv->type.isa(av->type)) { return false; }
     }
     
     return true;
