@@ -1,4 +1,8 @@
-* profile
+* make Env/Frame cheaper to copy
+* add inc/dec ops
+** rewrite +/- calls with literal args
+* join consecutive store/load
+* --
 * add let macro
 * add iter
 * add for macro
@@ -6,3 +10,11 @@
 * add string type
 * add char type
 * eval func args/rets in macro
+
+func fib (n Int) (Int)
+  if < n 2 n + fib - n 1 fib - n 2
+bench 10 (fib 20 d)
+
+6229
+5622
+2670

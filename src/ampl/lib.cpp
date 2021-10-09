@@ -5,7 +5,7 @@ namespace ampl {
   Lib::Lib(VM &vm): vm(vm) {}
 
   void Lib::bind(const Type &type) {
-    bind(type.name, vm.libs.abc.meta_type, type);
+    bind(type.imp->name, vm.libs.abc.meta_type, type);
   }			     
 
   Func Lib::bind_func(const Sym &name, const vector<Func::Arg> &args, const vector<Type> &rets, const Func::Body &body) {

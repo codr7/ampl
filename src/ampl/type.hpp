@@ -23,19 +23,31 @@ namespace ampl {
       function<bool (const Val &val)> is_true;
     };
 
+    struct Imp {
+      Imp(const Sym &name, initializer_list<Type> parent_types);
+      
+      Id id;
+      Sym name;
+      Methods methods;
+      array<bool, MAX_COUNT> parent_types;
+    };
+      
     Type(const Sym &name, initializer_list<Type> parent_types = {});
 
-    bool isa(const Type other) const { return parent_types[other.id]; }
-    
-    Id id;
-    Sym name;
-    Methods methods;
-    array<bool, MAX_COUNT> parent_types;
+    template <typename T>
+    Type(const shared_ptr<const T> &imp): imp(imp) {}
+
+    bool isa(const Type &other) const { return imp->parent_types[other.imp->id]; }
+
+    shared_ptr<const Imp> imp;
   };
 
   template <typename T>
   struct TType: Type {
     TType(const Sym &name, initializer_list<Type> parent_types = {}): Type(name, parent_types) {}
+
+    template <typename U>
+    TType(const shared_ptr<const U> &imp): Type(imp) {} 
   };
 
   bool operator==(const Type &lhs, const Type &rhs);

@@ -14,16 +14,51 @@ namespace ampl {
 namespace ampl::libs {
   using namespace ampl;
 
+  struct BoolType: TType<bool> {
+    struct Imp: Type::Imp {
+      Imp(const Sym &name, initializer_list<Type> parent_types);
+    };
+    
+    BoolType(const Sym &name, initializer_list<Type> parent_types);
+  };
+
+  struct FormType: TType<Form> {
+    struct Imp: Type::Imp {
+      Imp(const Sym &name, initializer_list<Type> parent_types);
+    };
+    
+    FormType(const Sym &name, initializer_list<Type> parent_types);
+  };
+
+  struct IntType: TType<int> {
+    struct Imp: Type::Imp {
+      Imp(const Sym &name, initializer_list<Type> parent_types);
+    };
+    
+    IntType(const Sym &name, initializer_list<Type> parent_types);
+  };
+
+  struct StackType: TType<Stack> {
+    struct Imp: Type::Imp {
+      Imp(const Sym &name, initializer_list<Type> parent_types);
+    };
+    
+    StackType(const Sym &name, initializer_list<Type> parent_types);
+  };
+
+  struct SymType: TType<Sym> {
+    struct Imp: Type::Imp {
+      Imp(const Sym &name, initializer_list<Type> parent_types);
+    };
+    
+    SymType(const Sym &name, initializer_list<Type> parent_types);
+  };
+
   struct ABC: Lib {
-    using BoolType = TType<bool>;
-    using FormType = TType<Form>;
     using FuncType = TType<Func>;
-    using IntType = TType<int>;
     using MacroType = TType<Macro>;
     using MetaType = TType<Type>;
     using RegType = TType<Reg>;
-    using StackType = TType<Stack>;
-    using SymType = TType<Sym>;
     
     ABC(VM &vm);
 
