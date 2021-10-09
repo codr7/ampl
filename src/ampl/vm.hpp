@@ -142,7 +142,7 @@ namespace ampl {
     PC pc() { return ops.size(); }
     
     template <typename T, typename...Args>
-    Op &emit(Args&&...args) {
+    Op &emit(Args &&...args) {
       T data(forward<Args>(args)...);
       ops.push_back(Op(data));
       return ops.back();

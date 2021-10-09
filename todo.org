@@ -1,4 +1,7 @@
-* make Env/Frame cheaper to copy
+* make Sym cheaper to copy
+** add Imp/shared_ptr<const>
+* add d call flag
+* make Env cheaper to copy
 * add inc/dec ops
 ** rewrite +/- calls with literal args
 * join consecutive store/load
@@ -13,8 +16,6 @@
 
 func fib (n Int) (Int)
   if < n 2 n + fib - n 1 fib - n 2
-bench 10 (fib 20 d)
+bench 100 (fib 20 d)
 
-6229
-5622
-2670
+1778

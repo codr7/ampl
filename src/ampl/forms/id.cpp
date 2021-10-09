@@ -22,7 +22,7 @@ namespace ampl::forms {
 	if (found->type == vm.libs.abc.func_type) {
 	  const Func &f = found->as<Func>();
 
-	  for (const Func::Arg &a [[maybe_unused]]: f.args) {
+	  for (const Func::Arg &a [[maybe_unused]]: f.imp->args) {
 	    Form af = in.front();
 	    in.pop_front();
 	    af.emit(in, vm);

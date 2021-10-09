@@ -214,8 +214,31 @@ namespace ampl::libs {
 		 
 		 Form body_form = in.front();
 		 in.pop_front();
-		 vm.scope().bind(name, vm.libs.abc.func_type, Func(name, args, rets));
-		 vm.get(name).as<Func>().emit(body_form, in, vm);
+
+		 PC skip_pc = vm.pc();
+		 vm.emit<ops::Goto>(body_form);
+		 PC start_pc = vm.pc();
+		 Scope &dscope = vm.scope();
+		 Func f(name, args, rets, start_pc, dscope.reg_count);
+		 dscope.bind(name, vm.libs.abc.func_type, f);
+		 Scope &scope = vm.push_scope();
+		 
+		 if (!f.imp->args.empty()) {
+		   int offset = 0;
+		   
+		   for (const Func::Arg *a = &f.imp->args.back(); a >= &f.imp->args.front(); a--) {
+		     if (a->name) {
+		       vm.emit<ops::Store>(body_form, scope.bind(*a->name), offset);
+		     } else {
+		       offset++;
+		     }
+		   }    
+		 }
+		 
+		 body_form.emit(in, vm);
+		 vm.pop_scope();
+		 vm.emit<ops::Ret>(body_form);
+		 vm.ops[skip_pc].as<ops::Goto>().pc = vm.pc();
 	       });
 
     bind_macro(vm.sym("if"), 3,

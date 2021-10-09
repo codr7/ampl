@@ -27,17 +27,37 @@ namespace ampl {
     
     using Body = function<PC (const Func &self, const Pos &pos, PC ret_pc, VM &vm)>;
 
-    Func(const Sym &name, const vector<Arg> &args, const vector<Type> &rets, const Body &body = nullptr);
+    struct Imp {
+      Imp(const Sym &name, const vector<Arg> &args, const vector<Type> &rets, const Body &body);
+
+      Imp(const Func &func,
+	  const Sym &name,
+	  const vector<Arg> &args,
+	  const vector<Type> &rets,
+	  PC start_pc,
+	  Reg min_reg);
+      
+      Id id;
+      Sym name;
+      vector<Arg> args;
+      vector<Type> rets;
+      int min_reg;
+      Body body;
+    };
+      
+    Func(const Sym &name, const vector<Arg> &args, const vector<Type> &rets, const Body &body);
+
+    Func(const Sym &name,
+	 const vector<Arg> &args,
+	 const vector<Type> &rets,
+	 PC start_pc,
+	 Reg min_reg);
+    
     void emit(const Form &body_form, deque<Form> &in, VM &vm);
     bool is_applicable(VM &vm) const;
-    PC eval(const Pos &pos, PC ret_pc, VM &vm) const;
-    
-    Id id;
-    Sym name;
-    vector<Arg> args;
-    vector<Type> rets;
-    int min_reg = 0, max_reg = 0;
-    Body body;
+    PC eval(const Pos &pos, PC ret_pc, VM &vm) const { return imp->body(*this, pos, ret_pc, vm); }
+
+    shared_ptr<const Imp> imp;
   };
 
   bool operator==(const Func &lhs, const Func &rhs);
