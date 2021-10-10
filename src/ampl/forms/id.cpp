@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "ampl/forms/id.hpp"
+#include "ampl/forms/lit.hpp"
 #include "ampl/vm.hpp"
 
 namespace ampl::forms {
@@ -22,13 +23,29 @@ namespace ampl::forms {
 	if (found->type == vm.libs.abc.func_type) {
 	  const Func &f = found->as<Func>();
 
-	  for (const Func::Arg &a [[maybe_unused]]: f.imp->args) {
-	    Form af = in.front();
+	  if (f == vm.libs.math.int_sub_func) {
+	    Form x(move(in.front()));
 	    in.pop_front();
-	    af.emit(in, vm);
+	    x.emit(in, vm);
+
+	    Form y(move(in.front()));
+	    in.pop_front();
+	    
+	    if (y.is<forms::Lit>()) {
+	      vm.emit<ops::Dec>(form, y.as<forms::Lit>().val.as<int>());
+	    } else {
+	      y.emit(in, vm);
+	      vm.emit<ops::Call>(form, f);
+	    }
+	  } else {
+	    for (const Func::Arg &a [[maybe_unused]]: f.imp->args) {
+	      Form af = in.front();
+	      in.pop_front();
+	      af.emit(in, vm);
+	    }
+
+	    vm.emit<ops::Call>(form, f);
 	  }
-	  
-	  vm.emit<ops::Call>(form, f);
 	} else if (found->type == vm.libs.abc.macro_type) {
 	  found->as<Macro>().expand(form, in, vm);
 	} else if (found->type == vm.libs.abc.reg_type) {

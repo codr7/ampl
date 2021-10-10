@@ -12,7 +12,7 @@ namespace ampl {
 
   struct VM;
   enum OpCode {
-    BENCH = 0, BRANCH, CALL, COPY, DROP, EQUAL, GOTO, LOAD, NOP, PUSH, RET, STORE,
+    BENCH = 0, BRANCH, CALL, COPY, DEC, DROP, EQUAL, GOTO, LOAD, NOP, PUSH, RET, STORE,
     //---STOP---
     STOP};
 
@@ -56,6 +56,15 @@ namespace ampl {
       Form form;
     };
 
+    struct Dec {
+      static const OpCode CODE = DEC;      
+
+      Dec(const Form &form, int delta): form(form), delta(delta) {}
+      
+      Form form;
+      int delta;
+    };
+      
     struct Drop {
       static const OpCode CODE = DROP;      
 
@@ -146,7 +155,8 @@ namespace ampl {
     OpCode code;
     variant<ops::Bench, ops::Branch,
 	    ops::Call, ops::Copy,
-	    ops::Drop, ops::Equal, ops::Goto, ops::Load, ops::Nop, ops::Push, ops::Ret, ops::Store,
+	    ops::Dec, ops::Drop,
+	    ops::Equal, ops::Goto, ops::Load, ops::Nop, ops::Push, ops::Ret, ops::Store,
 	    //---STOP---
 	    ops::Stop> data;
   };

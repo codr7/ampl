@@ -13,7 +13,7 @@ namespace ampl {
     static const void* dispatch[] = {
       &&BENCH, &&BRANCH,
       &&CALL, &&COPY,
-      &&DROP, &&EQUAL, &&GOTO, &&LOAD, &&NOP, &&PUSH, &&RET, &&STORE,
+      &&DEC, &&DROP, &&EQUAL, &&GOTO, &&LOAD, &&NOP, &&PUSH, &&RET, &&STORE,
       //---STOP---
       &&STOP};
 
@@ -65,6 +65,11 @@ namespace ampl {
 	s.push_back(s.back());
       }
 
+      DISPATCH(pc+1);
+    }
+
+  DEC: {
+      peek().as<int>() -= op->as<ops::Dec>().delta;
       DISPATCH(pc+1);
     }
 

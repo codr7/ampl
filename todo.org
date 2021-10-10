@@ -1,10 +1,5 @@
-* use unique_ptr for vm.frames like envs
-* use move
-* -- perf1
-* add d call flag
-* add inc/dec ops
-** rewrite +/- calls with literal args
 * join consecutive store/load
+* add d call flag
 * -- perf2
 * add let macro
 * add iter
@@ -18,4 +13,4 @@ func fib (n Int) (Int)
   if < n 2 n + fib - n 1 fib - n 2
 bench 100 (fib 20 d)
 
-1466
+1292

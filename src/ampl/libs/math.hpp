@@ -12,6 +12,8 @@ namespace ampl::libs {
 
   struct Math: Lib {
     Math(VM &vm);
+    
+    Func int_sub_func;
   };
 }
 
