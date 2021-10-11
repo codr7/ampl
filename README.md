@@ -81,10 +81,12 @@ Values may be dumped to `cout` using `dump`.
 ### performance
 />mpl currently runs around around 5 times as slow as Python3, given enough time and effort I see no reason why it couldn't run at least as fast.
 
+`bench` returns elapsed time in ms for running its body `n` times.
+
 ```
   func fib (n Int) (Int)
     if < n 2 n + fib - n 1 fib - n 2
   bench 100 (fib 20 d)
 
-[1292]
+[1233]
 ```

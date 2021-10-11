@@ -1,6 +1,7 @@
 #ifndef AMPL_VM_HPP
 #define AMPL_VM_HPP
 
+#include <iostream>
 #include <unordered_map>
 
 #include "ampl/ampl.hpp"
@@ -101,10 +102,10 @@ namespace ampl {
       return s.back();
     }
 
-    Val &peek() {
+    Val &peek(size_t offset = 0) {
       Stack &s = env().stack;
-      assert(!s.empty());
-      return s.back();
+      assert(offset < s.size());
+      return s[s.size() - offset - 1];
     }
 
     Val pop() {
@@ -150,11 +151,26 @@ namespace ampl {
 
     void emit(const deque<Form> &in) {
       deque<Form> tmp(in);
-
+      PC start_pc = pc();
+      
       while (!tmp.empty()) {
 	Form f(move(tmp.front()));
 	tmp.pop_front();
 	f.emit(tmp, *this);
+      }
+
+      optional<Op> prev_op;
+      
+      for (auto op = next(ops.begin(), start_pc); op != ops.end(); op++) {
+	if (prev_op && prev_op->code == STORE &&
+	    op->code == LOAD &&
+	    prev_op->as<ops::Store>().reg == op->as<ops::Load>().reg) {
+	  *op-- = Op(ops::Nop());
+	  auto &store = op->as<ops::Store>();
+	  *op = Op(ops::Store(store.form, store.reg, store.offset, ops::Store::PEEK));
+	}
+
+	prev_op = *op;
       }
     }
     

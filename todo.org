@@ -1,6 +1,4 @@
-* join consecutive store/load
 * add d call flag
-* -- perf2
 * add let macro
 * add iter
 * add for macro
@@ -13,4 +11,4 @@ func fib (n Int) (Int)
   if < n 2 n + fib - n 1 fib - n 2
 bench 100 (fib 20 d)
 
-1292
+1233

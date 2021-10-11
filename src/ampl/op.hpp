@@ -126,13 +126,17 @@ namespace ampl {
     };
 
     struct Store {
+      enum Flags {NONE = 0, PEEK = 1};
+      
       static const OpCode CODE = STORE;      
 
-      Store(const Form &form, Reg reg, size_t offset = 0): form(form), reg(reg), offset(offset) {}
+      Store(const Form &form, Reg reg, size_t offset = 0, Flags flags = NONE):
+	form(form), reg(reg), offset(offset), flags(flags) {}
       
       Form form;
       Reg reg;
       size_t offset;
+      Flags flags;
     };
 
     //---STOP---

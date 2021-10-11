@@ -120,7 +120,7 @@ namespace ampl {
   STORE: {
       {
 	auto &store = op->as<ops::Store>();
-	env().regs[store.reg] = pop(store.offset);
+	env().regs[store.reg] = (store.flags & ops::Store::PEEK) ? peek(store.offset) : pop(store.offset);
       }
       
       DISPATCH(pc+1);
