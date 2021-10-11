@@ -3,7 +3,7 @@
 [![Liberapay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/andreas7/donate)
 
 ### setup
-/>mpl requires CMake and a C++ compiler to build, rlwrap is highly recommended for running the REPL.
+/>mpl requires CMake and a C++ compiler to build, `rlwrap` is highly recommended for running the REPL.
 
 ```
 $ cd ampl
@@ -48,7 +48,7 @@ May the Source be with you!
 
 ### branches
 `if` may be used to branch on a condition.<br/>
-All values have boolean representations; most are true; but 0, empty strings etc. are false.
+All values have boolean representations; most are true; but `0`, empty strings etc. are false.
 
 ```
   if 42 'yes 'no
