@@ -48,7 +48,7 @@ May the Source be with you!
 
 ### branches
 `if` may be used to branch on a condition.<br/>
-All values boolean representations; most are true; but 0, empty strings etc. are false.
+All values have boolean representations; most are true; but 0, empty strings etc. are false.
 
 ```
   if 42 'yes 'no
@@ -79,7 +79,7 @@ Values may be dumped to `cout` using `dump`.
 ```
 
 ### performance
-/>mpl currently runs around around 5 times as slow as Python3, given enough time and effort I see no reason why it couldn't run at least as fast.
+/>mpl currently runs around around 5 times as slow as Python3.<br/>
 
 `bench` returns elapsed time in ms for running its body `n` times.
 
