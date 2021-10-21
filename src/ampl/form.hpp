@@ -91,6 +91,8 @@ namespace ampl {
     shared_ptr<const Imp> imp;
   };
 
+  Form pop_front(deque<Form> &in);
+  
   ostream &operator <<(ostream &out, const Form &form);
 }
 

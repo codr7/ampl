@@ -135,13 +135,11 @@ namespace ampl::libs {
 
     bind_macro(vm.sym("="), 2,
 	       [](const Macro &self, const Form &form, deque<Form> &in, VM &vm) {
-		 Form x = in.front();
-		 in.pop_front();
+		 Form x = pop_front(in);
 		 optional<Val> xv = x.val(vm);
 		 if (!xv) { x.emit(in, vm); }
 		 
-		 Form y = in.front();
-		 in.pop_front();
+		 Form y = pop_front(in);
 		 optional<Val> yv = y.val(vm);
 		 if (!yv) { y.emit(in, vm); }
 		 
@@ -150,11 +148,7 @@ namespace ampl::libs {
     
     bind_macro(vm.sym("bench"), 2,
 	       [](const Macro &self, const Form &form, deque<Form> &in, VM &vm) {
-		 Form reps_form(in.front());
-		 in.pop_front();
-		 Form body_form(in.front());
-		 in.pop_front();
-
+		 Form reps_form = pop_front(in), body_form = pop_front(in);
 		 PC op_pc = vm.pc();
 		 vm.emit<ops::Bench>(form, reps_form.val(vm)->as<int>());
 		 body_form.emit(in, vm);
@@ -178,12 +172,10 @@ namespace ampl::libs {
 
     bind_macro(vm.sym("func"), 4,
 	       [](const Macro &self, const Form &form, deque<Form> &in, VM &vm) {
-		 Form name_form = in.front();
-		 in.pop_front();
+		 Form name_form = pop_front(in);
 		 const Sym &name = name_form.as<forms::Id>().name;
 		 
-		 Form args_form = in.front();
-		 in.pop_front();
+		 Form args_form = pop_front(in);
 		 vector<Func::Arg> args;
 		 const deque<Form> &args_body = args_form.as<forms::Group>().body;
 		 
@@ -198,8 +190,7 @@ namespace ampl::libs {
 		   args.emplace_back(name.as<forms::Id>().name, val.as<Type>());
 		 }
 		 
-		 Form rets_form = in.front();
-		 in.pop_front();
+		 Form rets_form = pop_front(in);
 		 vector<Type> rets;
 
 		 for (const Form &rf: rets_form.as<forms::Group>().body) {
@@ -212,9 +203,7 @@ namespace ampl::libs {
 		   rets.emplace_back(val.as<Type>());
 		 }
 		 
-		 Form body_form = in.front();
-		 in.pop_front();
-
+		 Form body_form = pop_front(in);
 		 PC skip_pc = vm.pc();
 		 vm.emit<ops::Goto>(body_form);
 		 PC start_pc = vm.pc();
@@ -243,19 +232,16 @@ namespace ampl::libs {
 
     bind_macro(vm.sym("if"), 3,
 	       [](const Macro &self, const Form &form, deque<Form> &in, VM &vm) {
-		 Form cond(in.front());
-		 in.pop_front();
+		 Form cond = pop_front(in);
 		 cond.emit(in, vm);
 		 PC branch_pc = vm.pc();
 		 vm.emit<ops::Branch>(form);
-		 Form true_branch(in.front());
-		 in.pop_front();
+		 Form true_branch = pop_front(in);
 		 true_branch.emit(in, vm);
 		 PC skip_pc = vm.pc();
 		 vm.emit<ops::Goto>(form);
 		 vm.ops[branch_pc].as<ops::Branch>().false_pc = vm.pc();
-		 Form false_branch(in.front());
-		 in.pop_front();
+		 Form false_branch = pop_front(in);
 		 false_branch.emit(in, vm);
 		 vm.ops[skip_pc].as<ops::Goto>().pc = vm.pc();
 	       }); 
