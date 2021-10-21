@@ -1,3 +1,8 @@
+* add Form pop_front(deque<Form>)
+** use move/front/pop_front
+** grep pop_front and replace
+*** libs
+* run bench unsafe for comparison
 * add d call flag
 * add let macro
 * add iter
@@ -6,9 +11,3 @@
 * add string type
 * add char type
 * eval func args/rets in macro
-
-func fib (n Int) (Int)
-  if < n 2 n + fib - n 1 fib - n 2
-bench 100 (fib 20 d)
-
-1233
