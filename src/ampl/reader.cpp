@@ -4,12 +4,14 @@
 #include "ampl/forms/group.hpp"
 #include "ampl/forms/id.hpp"
 #include "ampl/forms/lit.hpp"
+#include "ampl/forms/nop.hpp"
+#include "ampl/forms/ref.hpp"
 #include "ampl/reader.hpp"
 #include "ampl/vm.hpp"
 
 namespace ampl {
   optional<Form> read_form(istream &in, Pos &pos, VM &vm) {
-    vector<Reader> readers {read_ws, read_int, read_quote, read_group, read_id};
+    vector<Reader> readers {read_ws, read_int, read_ref, read_quote, read_group, read_id};
     optional<Form> f;
     
     for (Reader r: readers) {
@@ -70,6 +72,8 @@ namespace ampl {
     }
 
     if (!buf.tellp()) { return nullopt; }
+    string name = buf.str();
+    if (name == "_") { return Form(fpos, forms::Nop()); }
     return Form(fpos, forms::Id(vm.sym(buf.str())));
   }
 
@@ -125,6 +129,23 @@ namespace ampl {
     return Form(fpos, forms::Lit(f->quote(vm)));
   }
 
+  optional<Form> read_ref(istream &in, Pos &pos, VM &vm) {
+    char c = 0;
+    
+    if (!in.get(c)) { return nullopt; }
+
+    if (c != '&') {
+      in.unget();
+      return nullopt;
+    }
+    
+    Pos fpos(pos);
+    pos.column++;
+    optional<Form> f = read_id(in, pos, vm);
+    if (!f) { throw ReadError(pos, "Missing referenced form"); }
+    return Form(fpos, forms::Ref(f->as<forms::Id>().name));
+  }
+  
   optional<Form> read_ws(istream &in, Pos &pos, VM &vm) {
     char c = 0;
     

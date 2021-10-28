@@ -39,8 +39,7 @@ namespace ampl::forms {
 	    }
 	  } else {
 	    for (const Func::Arg &a [[maybe_unused]]: f.imp->args) {
-	      Form af = in.front();
-	      in.pop_front();
+	      Form af = pop_front(in);
 	      af.emit(in, vm);
 	    }
 

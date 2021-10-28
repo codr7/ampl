@@ -30,6 +30,14 @@ namespace ampl::libs {
     FormType(const Sym &name, initializer_list<Type> parent_types);
   };
 
+  struct FuncType: TType<Func> {
+    struct Imp: Type::Imp {
+      Imp(const Sym &name, initializer_list<Type> parent_types);
+    };
+    
+    FuncType(const Sym &name, initializer_list<Type> parent_types);
+  };
+
   struct IntType: TType<int> {
     struct Imp: Type::Imp {
       Imp(const Sym &name, initializer_list<Type> parent_types);
@@ -55,7 +63,6 @@ namespace ampl::libs {
   };
 
   struct ABC: Lib {
-    using FuncType = TType<Func>;
     using MacroType = TType<Macro>;
     using MetaType = TType<Type>;
     using RegType = TType<Reg>;

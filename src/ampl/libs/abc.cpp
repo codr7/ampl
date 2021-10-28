@@ -30,11 +30,17 @@ namespace ampl::libs {
 
   FormType::Imp::Imp(const Sym &name, initializer_list<Type> parent_types): Type::Imp(name, parent_types) {
     methods.dump = [](auto &val, auto &out) { val.template as<Form>().dump(out); };
-    methods.is_true = [](auto &val) { return true; };
   }
 
   FormType::FormType(const Sym &name, initializer_list<Type> parent_types):
     TType<Form>(make_shared<const Imp>(name, parent_types)) {}
+
+  FuncType::Imp::Imp(const Sym &name, initializer_list<Type> parent_types): Type::Imp(name, parent_types) {
+    methods.dump = [](auto &val, auto &out) { out << val.template as<Func>(); };
+  }
+
+  FuncType::FuncType(const Sym &name, initializer_list<Type> parent_types):
+    TType<Func>(make_shared<const Imp>(name, parent_types)) {}
 
   IntType::Imp::Imp(const Sym &name, initializer_list<Type> parent_types): Type::Imp(name, parent_types) {
     methods.dump = [](auto &val, auto &out) { out << val.template as<int>(); };
@@ -102,8 +108,6 @@ namespace ampl::libs {
       Sym xv = x.template as<Sym>(), yv = y.template as<Sym>();
       return xv == yv;
     };
-
-    methods.is_true = [](auto &val) { return true; };
   }
 
   SymType::SymType(const Sym &name, initializer_list<Type> parent_types):
@@ -155,7 +159,14 @@ namespace ampl::libs {
 		 vm.emit<ops::Stop>();
 		 vm.ops[op_pc].as<ops::Bench>().end_pc = vm.pc();
 	       });
-    
+
+    bind_func(vm.sym("call"),
+	      {{vm.sym("target"), vm.libs.abc.func_type}},
+	      {},
+	      [](const Func &self, const Pos &pos, PC ret_pc, VM &vm) {
+		return vm.pop().as<Func>().eval(pos, ret_pc, vm);
+	      });
+
     bind_macro(vm.sym("cp"), 0,
 	       [](const Macro &self, const Form &form, deque<Form> &in, VM &vm) {
 		 vm.emit<ops::Copy>(form);
@@ -244,6 +255,23 @@ namespace ampl::libs {
 		 Form false_branch = pop_front(in);
 		 false_branch.emit(in, vm);
 		 vm.ops[skip_pc].as<ops::Goto>().pc = vm.pc();
-	       }); 
+	       });
+
+    bind_macro(vm.sym("let"), 2,
+	       [](const Macro &self, const Form &form, deque<Form> &in, VM &vm) {
+		 Form key_form = pop_front(in);
+		 if (!key_form.is<forms::Id>()) { throw EmitError(key_form.pos, "Invalid id: ", key_form); }
+		 const Sym &key = key_form.as<forms::Id>().name;
+		 Form val_form = pop_front(in);
+		 optional<Val> val = val_form.val(vm);
+
+		 if (val) {
+		   vm.scope().bind(key, *val);
+		 } else {
+		   Reg reg = vm.scope().bind(key);
+		   val_form.emit(in, vm);
+		   vm.emit<ops::Store>(key_form, reg);
+		 }
+	       });
   }
 }

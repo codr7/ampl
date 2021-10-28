@@ -1,17 +1,13 @@
-* add closure example to readme
-* add test op
-* pgo/hn
 * add d call flag
+* add include macro
+* add test op
+** add tests from readme
 * add array based SStack type like RBuf
 ** change Stack alias and compare performance
 * run bench unsafe for comparison
-* add let macro
 * add iter
 * add for macro
 * add stack reader
 * add string type
 * add char type
 * eval func args/rets in macro
-
-
-

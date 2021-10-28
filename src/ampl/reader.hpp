@@ -12,6 +12,7 @@ namespace ampl {
   optional<Form> read_id(istream &in, Pos &pos, VM &vm);
   optional<Form> read_int(istream &in, Pos &pos, VM &vm);
   optional<Form> read_quote(istream &in, Pos &pos, VM &vm);
+  optional<Form> read_ref(istream &in, Pos &pos, VM &vm);
   optional<Form> read_ws(istream &in, Pos &pos, VM &vm);
 }
 

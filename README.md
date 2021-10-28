@@ -12,7 +12,7 @@ $ cd build
 $ cmake ..
 $ make
 $ rlwrap ./ampl
-/>mpl v5
+/>mpl v6
 
 Press Return on empty line to evaluate.
 
@@ -64,6 +64,41 @@ New functions may be defined using `func`.
 
 []
   foo
+
+[42]
+```
+
+Functions are lexically scoped,
+
+```
+  func foo () () (
+    func bar () (Int) 42
+    bar
+  )
+
+[]
+  foo
+
+[]
+  bar
+
+Error in 'repl' at line 1, column 0: Unknown id:  bar
+```
+
+and capture their environment.
+
+```
+  func foo () (Func) (
+    let bar 42
+    func baz () (Int) bar
+    &baz
+  )
+
+[]
+  foo
+
+[Func(baz)]
+  call _
 
 [42]
 ```

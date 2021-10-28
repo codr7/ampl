@@ -36,7 +36,7 @@ namespace ampl {
   
   bool Func::is_applicable(VM &vm) const {
     const Stack &s(vm.stack());
-    if (s.empty()) { return false; }
+    if (s.empty()) { return imp->args.empty(); }
     const Val *sv = &s.back(), *min_sv = &s.front();
     const Arg *min_av = &imp->args.front();
     
