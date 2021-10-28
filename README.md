@@ -85,7 +85,7 @@ Functions are lexically scoped,
 Error in 'repl' at line 1, column 0: Unknown id:  bar
 ```
 
-and capture their environment.
+and capture their defining environment.
 
 ```
   func foo () (Func) (
