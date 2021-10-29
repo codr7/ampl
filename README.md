@@ -12,7 +12,7 @@ $ cd build
 $ cmake ..
 $ make
 $ rlwrap ./ampl
-/>mpl v6
+/>mpl v7
 
 Press Return on empty line to evaluate.
 
@@ -68,6 +68,17 @@ New functions may be defined using `func`.
 [42]
 ```
 
+Anonymous functions may be created by simply omitting the name.
+
+```
+  func () (Int) 42
+
+[Func()]
+  call _
+
+[42]
+```
+
 Functions are lexically scoped,
 
 ```
@@ -90,17 +101,24 @@ and capture their defining environment.
 ```
   func foo () (Func) (
     let bar 42
-    func baz () (Int) bar
-    &baz
+    func () (Int) bar
   )
 
 []
-  foo
-
-[Func(baz)]
-  call _
+  call _ foo
 
 [42]
+```
+
+Functions may be referenced by prefixing with `&`.
+
+```
+  func foo () (Int) 42
+
+[]
+  &foo
+  
+[Func(foo)]
 ```
 
 ### debugging tools

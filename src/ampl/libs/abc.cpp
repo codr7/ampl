@@ -184,9 +184,10 @@ namespace ampl::libs {
     bind_macro(vm.sym("func"), 4,
 	       [](const Macro &self, const Form &form, deque<Form> &in, VM &vm) {
 		 Form name_form = pop_front(in);
-		 const Sym &name = name_form.as<forms::Id>().name;
+		 bool lambda = name_form.is<forms::Group>();
+		 Sym name = lambda ? vm.sym("") : name_form.as<forms::Id>().name;
 		 
-		 Form args_form = pop_front(in);
+		 Form args_form = lambda ? name_form : pop_front(in);
 		 vector<Func::Arg> args;
 		 const deque<Form> &args_body = args_form.as<forms::Group>().body;
 		 
@@ -220,7 +221,7 @@ namespace ampl::libs {
 		 PC start_pc = vm.pc();
 		 Scope &dscope = vm.scope();
 		 Func f(name, args, rets, start_pc, dscope.reg_count);
-		 dscope.bind(name, vm.libs.abc.func_type, f);
+		 if (!lambda) { dscope.bind(name, vm.libs.abc.func_type, f); }
 		 Scope &scope = vm.push_scope(dscope);
 		 
 		 if (!f.imp->args.empty()) {
@@ -239,6 +240,7 @@ namespace ampl::libs {
 		 vm.pop_scope();
 		 vm.emit<ops::Ret>(body_form);
 		 vm.ops[skip_pc].as<ops::Goto>().pc = vm.pc();
+		 if (lambda) { vm.emit<ops::Push>(form, vm.libs.abc.func_type, f); }
 	       });
 
     bind_macro(vm.sym("if"), 3,
