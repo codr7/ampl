@@ -56,6 +56,32 @@ All values have boolean representations; most are true; but `0`, empty strings e
 ['yes]
 ```
 
+### bindings
+Identifiers may be bound once per scope using `let`.
+
+```
+  let foo 42
+
+[]
+  let foo 42
+
+Error in 'repl' at line 1, column 0: Dup binding:  foo
+```
+
+`_` may be used as a placeholder to pop the stack.
+
+```
+  42
+
+[42]
+  let foo _
+
+[]
+  foo
+
+[42]
+```
+
 ### functions
 New functions may be defined using `func`.
 
@@ -65,6 +91,17 @@ New functions may be defined using `func`.
 []
   foo
 
+[42]
+```
+
+### groups
+Parens may be used to group forms.
+
+```
+  let foo (dump 'binding 42)
+  foo
+
+'binding
 [42]
 ```
 

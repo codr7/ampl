@@ -13,14 +13,14 @@ namespace ampl {
   struct Scope {
     Scope(VM &vm, optional<Scope> parent_scope = nullopt);
 
-    void bind(const Sym &key, const Val &val);
+    bool bind(const Sym &key, const Val &val);
 
     template <typename T>
-    void bind(const Sym &key, const TType<T> &type, const T &data) {
-      bind(key, Val(type, data));
+    bool bind(const Sym &key, const TType<T> &type, const T &data) {
+      return bind(key, Val(type, data));
     }
     
-    Reg bind(const Sym &key);
+    optional<Reg> bind(const Sym &key);
     
     VM &vm;
     Reg reg_count = 0;

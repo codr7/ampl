@@ -221,7 +221,11 @@ namespace ampl::libs {
 		 PC start_pc = vm.pc();
 		 Scope &dscope = vm.scope();
 		 Func f(name, args, rets, start_pc, dscope.reg_count);
-		 if (!lambda) { dscope.bind(name, vm.libs.abc.func_type, f); }
+
+		 if (!lambda && !dscope.bind(name, vm.libs.abc.func_type, f)) {
+		   throw EmitError(form.pos, "Dup binding: ", name);
+		 }
+		 
 		 Scope &scope = vm.push_scope(dscope);
 		 
 		 if (!f.imp->args.empty()) {
@@ -229,7 +233,9 @@ namespace ampl::libs {
 		   
 		   for (const Func::Arg *a = &f.imp->args.back(); a >= &f.imp->args.front(); a--) {
 		     if (a->name) {
-		       vm.emit<ops::Store>(body_form, scope.bind(*a->name), offset);
+		       optional<Reg> reg = scope.bind(*a->name);
+		       if (!reg) { throw EmitError(form.pos, "Dup binding: ", *a->name); }
+		       vm.emit<ops::Store>(body_form, *reg, offset);
 		     } else {
 		       offset++;
 		     }
@@ -268,11 +274,12 @@ namespace ampl::libs {
 		 optional<Val> val = val_form.val(vm);
 
 		 if (val) {
-		   vm.scope().bind(key, *val);
+		   if (!vm.scope().bind(key, *val)) { throw EmitError(form.pos, "Dup binding: ", key.imp->name); }
 		 } else {
-		   Reg reg = vm.scope().bind(key);
+		   optional<Reg> reg = vm.scope().bind(key);
+		   if (!reg) { throw EmitError(form.pos, "Dup binding: ", key); }
 		   val_form.emit(in, vm);
-		   vm.emit<ops::Store>(key_form, reg);
+		   vm.emit<ops::Store>(key_form, *reg);
 		 }
 	       });
   }

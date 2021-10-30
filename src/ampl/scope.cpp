@@ -7,15 +7,16 @@ namespace ampl {
     vm(vm),
     reg_count(parent_scope ? parent_scope->reg_count : 0) {}
 
-  void Scope::bind(const Sym &key, const Val &val) {
+  bool Scope::bind(const Sym &key, const Val &val) {
     auto found = bindings.find(key);
-    if (found != bindings.end()) { throw Error("Dup binding: ", key.imp->name); }
+    if (found != bindings.end()) { return false; }
     bindings.emplace(key, val);
+    return true;
   }
 
-  Reg Scope::bind(const Sym &key) {
+  optional<Reg> Scope::bind(const Sym &key) {
     Reg reg = reg_count++;
-    bind(key, vm.libs.abc.reg_type, reg);
+    if (!bind(key, vm.libs.abc.reg_type, reg)) { return nullopt; }
     return reg;
   }
 }
