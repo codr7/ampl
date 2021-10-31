@@ -2,6 +2,7 @@
 
 #include "ampl/forms/id.hpp"
 #include "ampl/forms/lit.hpp"
+#include "ampl/sym.hpp"
 #include "ampl/vm.hpp"
 
 namespace ampl::forms {
@@ -21,9 +22,26 @@ namespace ampl::forms {
       
       if (found) {
 	if (found->type == vm.libs.abc.func_type) {
-	  const Func &f = found->as<Func>();
+	  const Func &func = found->as<Func>();
+	  CallFlags flags = CALL_CHECK;
 
-	  if (f == vm.libs.math.int_sub_func) {
+	  while (!in.empty()) {
+	    const Form &f = in.front();
+	    if (!f.is<forms::Id>()) { break; }
+	    string id = f.as<forms::Id>().name.imp->name;
+	    if (id.front() != '|') { break; }
+	    string flag = id.substr(1);
+	    
+	    if (flag == "d" || flag == "drop") {
+	      flags = CallFlags(flags | CALL_DROP);
+	    } else {
+	      throw EmitError(form.pos, "Invalid call flag: ", flag);
+	    }
+	    
+	    in.pop_front();
+	  }
+
+	  if (func == vm.libs.math.int_sub_func) {
 	    Form x(move(in.front()));
 	    in.pop_front();
 	    x.emit(in, vm);
@@ -35,15 +53,16 @@ namespace ampl::forms {
 	      vm.emit<ops::Dec>(form, y.as<forms::Lit>().val.as<int>());
 	    } else {
 	      y.emit(in, vm);
-	      vm.emit<ops::Call>(form, f);
+	      vm.emit<ops::Call>(form, func, flags);
 	    }
-	  } else {
-	    for (const Func::Arg &a [[maybe_unused]]: f.imp->args) {
+	  } else {	    
+	    for (const Func::Arg &a [[maybe_unused]]: func.imp->args) {
+	      if (in.empty()) { throw EmitError(form.pos, "Not applicable: ", func); }
 	      Form af = pop_front(in);
 	      af.emit(in, vm);
 	    }
 
-	    vm.emit<ops::Call>(form, f);
+	    vm.emit<ops::Call>(form, func, flags);
 	  }
 	} else if (found->type == vm.libs.abc.macro_type) {
 	  found->as<Macro>().expand(form, in, vm);

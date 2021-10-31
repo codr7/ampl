@@ -19,8 +19,8 @@ namespace ampl {
 		 PC start_pc,
 		 Reg min_reg):
     id(Func::next_id++), name(name), args(args), rets(rets), min_reg(min_reg),
-    body([start_pc](const Func &self, const Pos &pos, PC ret_pc, VM &vm) {
-      vm.push_frame(self, ret_pc);
+    body([start_pc](const Func &self, CallFlags flags, const Pos &pos, PC ret_pc, VM &vm) {
+      vm.push_frame(self, flags, ret_pc);
       return start_pc;
     }) {} 
 

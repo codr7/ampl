@@ -53,7 +53,7 @@ namespace ampl {
 	throw EvalError(call.form.pos, "Not applicable: ", call.target, '\n', stack());
       }
 
-      DISPATCH(call.target.eval(call.form.pos, pc+1, *this));
+      DISPATCH(call.target.eval(call.flags, call.form.pos, pc+1, *this));
     }
 
   COPY: {

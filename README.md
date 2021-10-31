@@ -65,7 +65,7 @@ Identifiers may be bound once per scope using `let`.
 []
   let foo 42
 
-Error in 'repl' at line 1, column 0: Dup binding:  foo
+Error in 'repl' at line 1, column 0: Dup binding: foo
 ```
 
 `_` may be used as a placeholder to pop the stack.
@@ -82,6 +82,17 @@ Error in 'repl' at line 1, column 0: Dup binding:  foo
 [42]
 ```
 
+### groups
+Parens may be used to group forms.
+
+```
+  let foo (dump 'binding 42)
+  foo
+
+'binding
+[42]
+```
+
 ### functions
 New functions may be defined using `func`.
 
@@ -91,17 +102,6 @@ New functions may be defined using `func`.
 []
   foo
 
-[42]
-```
-
-### groups
-Parens may be used to group forms.
-
-```
-  let foo (dump 'binding 42)
-  foo
-
-'binding
 [42]
 ```
 
@@ -130,7 +130,7 @@ Functions are lexically scoped,
 []
   bar
 
-Error in 'repl' at line 1, column 0: Unknown id:  bar
+Error in 'repl' at line 1, column 0: Unknown id: bar
 ```
 
 and capture their defining environment.
@@ -158,6 +158,19 @@ Functions may be referenced by prefixing with `&`.
 [Func(foo)]
 ```
 
+#### call flags
+Call flags may be specified by prefixing with `|`.
+
+##### |d(rop)
+Drops returned values.
+
+```
+  func foo () (Int) 42
+  foo|d
+  
+[]
+```
+
 ### debugging tools
 Values may be dumped to `cout` using `dump`.
 
@@ -176,7 +189,7 @@ Values may be dumped to `cout` using `dump`.
 ```
   func fib (n Int) (Int)
     if < n 2 n + fib - n 1 fib - n 2
-  bench 100 (fib 20 d)
+  bench 100 (fib|d 20)
 
 [1233]
 ```

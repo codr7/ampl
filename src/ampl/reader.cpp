@@ -62,7 +62,7 @@ namespace ampl {
     char c = 0;
     
     while (in.get(c)) {
-      if (!isgraph(c) || c == '(' || c == ')') {
+      if (!isgraph(c) || (c == '|' && buf.tellp()) ||  c == '(' || c == ')') {
 	in.unget();
 	break;
       }

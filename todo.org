@@ -1,4 +1,5 @@
-* add d call flag
+* add t call flag
+* add u call flag
 * add include macro
 * add test op
 ** add tests from readme

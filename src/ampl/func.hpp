@@ -14,7 +14,7 @@ namespace ampl {
   struct Pos;
   struct VM;
 
-  enum CallFlags { CALL_CHECK = 1 };
+  enum CallFlags { CALL_CHECK = 1, CALL_DROP = 4 };
 
   struct Func {
     using Id = uint64_t;
@@ -27,7 +27,7 @@ namespace ampl {
     
     static Id next_id;
     
-    using Body = function<PC (const Func &self, const Pos &pos, PC ret_pc, VM &vm)>;
+    using Body = function<PC (const Func &self, CallFlags flags, const Pos &pos, PC ret_pc, VM &vm)>;
 
     struct Imp {
       Imp(const Sym &name, const vector<Arg> &args, const vector<Type> &rets, const Body &body);
@@ -57,7 +57,10 @@ namespace ampl {
     
     void emit(const Form &body_form, deque<Form> &in, VM &vm);
     bool is_applicable(VM &vm) const;
-    PC eval(const Pos &pos, PC ret_pc, VM &vm) const { return imp->body(*this, pos, ret_pc, vm); }
+
+    PC eval(CallFlags flags, const Pos &pos, PC ret_pc, VM &vm) const {
+      return imp->body(*this, flags, pos, ret_pc, vm);
+    }
 
     shared_ptr<const Imp> imp;
   };

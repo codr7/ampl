@@ -66,8 +66,8 @@ namespace ampl {
       assert(false);
     }
     
-    void push_frame(const Func &target, PC ret_pc) {
-      frames.emplace_back(target, ret_pc, *this);
+    void push_frame(const Func &target, CallFlags flags, PC ret_pc) {
+      frames.emplace_back(target, flags, ret_pc, *this);
     }
 
     Frame pop_frame() {

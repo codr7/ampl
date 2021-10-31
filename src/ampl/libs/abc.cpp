@@ -163,8 +163,8 @@ namespace ampl::libs {
     bind_func(vm.sym("call"),
 	      {{vm.sym("target"), vm.libs.abc.func_type}},
 	      {},
-	      [](const Func &self, const Pos &pos, PC ret_pc, VM &vm) {
-		return vm.pop().as<Func>().eval(pos, ret_pc, vm);
+	      [](const Func &self, CallFlags flags, const Pos &pos, PC ret_pc, VM &vm) {
+		return vm.pop().as<Func>().eval(flags, pos, ret_pc, vm);
 	      });
 
     bind_macro(vm.sym("cp"), 0,
@@ -175,7 +175,7 @@ namespace ampl::libs {
     bind_func(vm.sym("dump"),
 	      {{vm.sym("val"), vm.libs.abc.any_type}},
 	      {},
-	      [](const Func &self, const Pos &pos, PC ret_pc, VM &vm) {
+	      [](const Func &self, CallFlags flags, const Pos &pos, PC ret_pc, VM &vm) {
 		vm.pop().dump(cout);
 		cout << endl;
 		return ret_pc;

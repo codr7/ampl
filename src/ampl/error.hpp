@@ -12,7 +12,7 @@ namespace ampl {
   string wstr(Arg &&arg, Args &&...args) {
     stringstream buf;
     buf << arg;
-    ((buf << ' ' << std::forward<Args>(args)), ...);
+    ((buf << std::forward<Args>(args)), ...);
     return buf.str();
   }
 

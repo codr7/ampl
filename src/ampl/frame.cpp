@@ -4,7 +4,7 @@
 #include "ampl/vm.hpp"
 
 namespace ampl {
-  Frame::Frame(const Func &target, PC ret_pc, VM &vm): target(target), ret_pc(ret_pc) {
+  Frame::Frame(const Func &target, CallFlags flags, PC ret_pc, VM &vm): target(target), flags(flags), ret_pc(ret_pc) {
     vm.envs.reserve(vm.envs.size()+1);
     Env &src = vm.env(), &dst = vm.push_env();
 
@@ -29,8 +29,10 @@ namespace ampl {
 	if (!sv->type.isa(*rv)) { throw EvalError(pos, "Wrong return type: ", *sv); }
       }
 
-      auto i = src->stack.begin() + src->stack.size() - target.imp->rets.size(), j = src->stack.end();
-      move(i, j, back_inserter(vm.env().stack));
+      if (!(flags & CALL_DROP)) {
+	auto i = src->stack.begin() + src->stack.size() - target.imp->rets.size(), j = src->stack.end();
+	move(i, j, back_inserter(vm.env().stack));
+      }
     }
     
     return ret_pc;
