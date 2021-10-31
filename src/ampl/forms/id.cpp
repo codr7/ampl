@@ -57,8 +57,13 @@ namespace ampl::forms {
 	    }
 	  } else {	    
 	    for (const Func::Arg &a [[maybe_unused]]: func.imp->args) {
-	      if (in.empty()) { throw EmitError(form.pos, "Not applicable: ", func); }
+	      if (in.empty()) {
+		throw EmitError(form.pos, "Missing arg: ", func, ' ', a.name ? a.name->imp->name : "n/a");
+	      }
+	      
 	      Form af = pop_front(in);
+	      optional<Val> v = af.val(vm);
+	      if (v && !v->type.isa(a.type)) { throw EmitError(form.pos, "Wrong arg type: ", v->type, ' ', a.type); }
 	      af.emit(in, vm);
 	    }
 

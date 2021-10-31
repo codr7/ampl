@@ -39,10 +39,8 @@ namespace ampl {
     struct Call {
       static const OpCode CODE = CALL;      
 
-      Call(const Form &form, const Func &target, CallFlags flags = CALL_CHECK): form(form), target(target), flags(flags) {
-	if ((flags & CALL_CHECK) && target.imp->args.empty()) { flags = CallFlags(flags ^ CALL_CHECK); }
-	if (!(flags & CALL_DROP) && target.imp->rets.empty()) { flags = CallFlags(flags & CALL_DROP); }
-      }
+      Call(const Form &form, const Func &target, CallFlags flags = CALL_CHECK):
+	form(form), target(target), flags(flags) {}
       
       Form form;
       Func target;

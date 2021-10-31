@@ -8,10 +8,12 @@ namespace ampl {
     vm.envs.reserve(vm.envs.size()+1);
     Env &src = vm.env(), &dst = vm.push_env();
 
-    auto i = src.stack.begin() + src.stack.size() - target.imp->args.size(), j = src.stack.end();
-    move(i, j, back_inserter(dst.stack));
-    src.stack.erase(i, j);
-    copy(src.regs.begin(), src.regs.begin() + target.imp->min_reg, dst.regs.begin());
+    if (!target.imp->args.empty()) {
+      auto i = src.stack.begin() + src.stack.size() - target.imp->args.size(), j = src.stack.end();
+      move(i, j, back_inserter(dst.stack));
+      src.stack.erase(i, j);
+      copy(src.regs.begin(), src.regs.begin() + target.imp->min_reg, dst.regs.begin());
+    }
   }
 
   PC Frame::ret(const Pos &pos, VM &vm) {
@@ -19,14 +21,14 @@ namespace ampl {
     
     if (!target.imp->rets.empty()) {
       if (src->stack.size() < target.imp->rets.size()) {
-	throw EvalError(pos, "Not enough return values: ", src->stack);
+	throw EvalError(pos, "Not enough ret values: ", src->stack);
       }
       
       Val *sv = &src->stack.back();
       
       for (const Type *rv = &target.imp->rets.back(); rv >= &target.imp->rets.front(); rv--, sv--) {
-	assert(sv >= &src->stack.front());
-	if (!sv->type.isa(*rv)) { throw EvalError(pos, "Wrong return type: ", *sv); }
+	if (sv < &src->stack.front()) { throw EvalError(pos, "Missing ret value"); }
+	if (!sv->type.isa(*rv)) { throw EvalError(pos, "Wrong ret type: ", *sv); }
       }
 
       if (!(flags & CALL_DROP)) {
