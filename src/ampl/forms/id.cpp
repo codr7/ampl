@@ -34,6 +34,8 @@ namespace ampl::forms {
 	    
 	    if (flag == "d" || flag == "drop") {
 	      flags = CallFlags(flags | CALL_DROP);
+	    } else if (flag == "t" || flag == "tco") {
+	      flags = CallFlags(flags | CALL_TCO);
 	    } else {
 	      throw EmitError(form.pos, "Invalid call flag: ", flag);
 	    }

@@ -18,7 +18,7 @@ namespace ampl {
 		 const vector<Type> &rets,
 		 PC start_pc,
 		 Reg min_reg):
-    id(Func::next_id++), name(name), args(args), rets(rets), min_reg(min_reg),
+    id(Func::next_id++), name(name), args(args), rets(rets), start_pc(start_pc), min_reg(min_reg),
     body([start_pc](const Func &self, CallFlags flags, const Pos &pos, PC ret_pc, VM &vm) {
       vm.push_frame(self, flags, ret_pc);
       return start_pc;

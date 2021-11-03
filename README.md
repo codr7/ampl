@@ -182,14 +182,33 @@ Values may be dumped to `cout` using `dump`.
 ```
 
 ### performance
-/>mpl currently runs around around 5 times as slow as Python3.<br/>
+/>mpl currently runs 3+ times as slow as Python3.<br/>
 
 `bench` returns elapsed time in ms for running its body `n` times.
 
 ```
-  func fib (n Int) (Int)
-    if < n 2 n + fib - n 1 fib - n 2
-  bench 100 (fib|d 20)
+$ cd bench
+$ python3 fibrec.py
+233
+```
+
+```
+  func fibrec (n Int) (Int)
+    if < n 2 n + fibrec - n 1 fibrec - n 2
+  bench 100 (fibrec|d 20)
 
 [1233]
+```
+
+```
+$ python3 fibtail.py
+105
+```
+
+```
+  func fibtail (n Int a Int b Int) (Int)
+    if = n 0 a if = n 1 b fibtail|t - n 1 b + a b
+  bench 10000 (fibtail|d 70 0 1)
+
+[278]
 ```

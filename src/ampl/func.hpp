@@ -14,7 +14,7 @@ namespace ampl {
   struct Pos;
   struct VM;
 
-  enum CallFlags { CALL_CHECK = 1, CALL_DROP = 4 };
+  enum CallFlags { CALL_CHECK = 1, CALL_DROP = 4, CALL_TCO = 8};
 
   struct Func {
     using Id = uint64_t;
@@ -43,6 +43,7 @@ namespace ampl {
       Sym name;
       vector<Arg> args;
       vector<Type> rets;
+      PC start_pc;
       int min_reg;
       Body body;
     };
@@ -59,7 +60,7 @@ namespace ampl {
     bool is_applicable(VM &vm) const;
 
     PC eval(CallFlags flags, const Pos &pos, PC ret_pc, VM &vm) const {
-      return imp->body(*this, flags, pos, ret_pc, vm);
+      return (flags & CALL_TCO) ? imp->start_pc : imp->body(*this, flags, pos, ret_pc, vm);
     }
 
     shared_ptr<const Imp> imp;
