@@ -12,18 +12,16 @@ namespace ampl {
       auto i = src.stack.begin() + src.stack.size() - target.imp->args.size(), j = src.stack.end();
       move(i, j, back_inserter(dst.stack));
       src.stack.erase(i, j);
-      copy(src.regs.begin(), src.regs.begin() + target.imp->min_reg, dst.regs.begin());
     }
+
+    copy(src.regs.begin(), src.regs.begin() + target.imp->min_reg, dst.regs.begin());
   }
 
   PC Frame::ret(const Pos &pos, VM &vm) {
     unique_ptr<Env> src(vm.pop_env());
     
     if (!target.imp->rets.empty()) {
-      if (src->stack.size() < target.imp->rets.size()) {
-	throw EvalError(pos, "Not enough ret values: ", src->stack);
-      }
-      
+      if (src->stack.size() < target.imp->rets.size()) { throw EvalError(pos, "Not enough ret values: ", src->stack); }
       Val *sv = &src->stack.back();
       
       for (const Type *rv = &target.imp->rets.back(); rv >= &target.imp->rets.front(); rv--, sv--) {

@@ -10,8 +10,3 @@
 * add string type
 * add char type
 * eval func args/rets in macro
-
-func fibtail (n Int a Int b Int) (Int)
-  if = n 0 a if = n 1 b fibtail - n 1 b + a b
-
-bench 10000 (fibtail|d 70 0 1)
