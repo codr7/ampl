@@ -171,6 +171,17 @@ Drops returned values.
 []
 ```
 
+##### |t(co)
+Performs tail call optimization, may be used outside of tail call position which causes an immediate return.
+
+```
+  func foo (n Int) (Sym)
+    if = n 0 'done foo|t - n 1
+  foo 42
+  
+['done]
+```
+
 ### debugging tools
 Values may be dumped to `cout` using `dump`.
 

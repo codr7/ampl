@@ -1,3 +1,5 @@
+* specialcase lt like sub in id-mit
+** bench fibrec
 * add include macro
 * add test op
 ** add tests from readme
