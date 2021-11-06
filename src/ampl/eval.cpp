@@ -13,7 +13,7 @@ namespace ampl {
     static const void* dispatch[] = {
       &&BENCH, &&BRANCH,
       &&CALL, &&COPY,
-      &&DEC, &&DROP, &&EQUAL, &&GOTO, &&LOAD, &&NOP, &&PUSH, &&RET, &&STORE,
+      &&DEC, &&DROP, &&EQUAL, &&GOTO, &&GTLIT, &&LOAD, &&LTLIT, &&NOP, &&PUSH, &&RET, &&STORE,
       //---STOP---
       &&STOP};
 
@@ -93,12 +93,34 @@ namespace ampl {
       DISPATCH(op->as<ops::Goto>().pc);
     }
 
+  GTLIT: {
+      {
+	auto &gtlit = op->as<ops::GtLit>();
+	optional<Val> y(gtlit.y ? gtlit.y : pop()), x(gtlit.x ? gtlit.x : pop());
+	if (!x || !y) { throw EvalError(gtlit.form.pos, "Missing arg"); }
+	push(libs.abc.bool_type, x->compare(*y) == GT);
+      }
+      
+      DISPATCH(pc+1);
+    }
+
   LOAD: {
       {
 	auto &load = op->as<ops::Load>();
 	auto v = env().regs[load.reg];
 	if (!v) { throw EvalError(load.form.pos, "Nothing to load"); }
 	push(*v);
+      }
+      
+      DISPATCH(pc+1);
+    }
+
+  LTLIT: {
+      {
+	auto &ltlit = op->as<ops::LtLit>();
+	optional<Val> y(ltlit.y ? ltlit.y : pop()), x(ltlit.x ? ltlit.x : pop());
+	if (!x || !y) { throw EvalError(ltlit.form.pos, "Missing arg"); }
+	push(libs.abc.bool_type, x->compare(*y) == LT);
       }
       
       DISPATCH(pc+1);

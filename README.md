@@ -208,7 +208,7 @@ $ python3 fibrec.py
     if < n 2 n + fibrec - n 1 fibrec - n 2
   bench 100 (fibrec|d 20)
 
-[1233]
+[1134]
 ```
 
 ```
@@ -221,5 +221,5 @@ $ python3 fibtail.py
     if = n 0 a if = n 1 b fibtail|t - n 1 b + a b
   bench 10000 (fibtail|d 70 0 1)
 
-[278]
+[270]
 ```

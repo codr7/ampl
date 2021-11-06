@@ -13,7 +13,7 @@ namespace ampl::libs {
   struct Math: Lib {
     Math(VM &vm);
     
-    Func int_sub_func;
+    Func int_gt_func, int_lt_func, int_sub_func;
   };
 }
 

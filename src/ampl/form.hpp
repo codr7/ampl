@@ -69,6 +69,13 @@ namespace ampl {
     const T& as() const { return dynamic_cast<const TImp<T>&>(*imp).imp; }
 
     template <typename T>
+    optional<T> try_as() const {
+      const T *result = dynamic_cast<const TImp<T> *>(imp.get());
+      if (!result) { return nullopt; }
+      return *result;
+    }
+    
+    template <typename T>
     bool is() const { return dynamic_cast<const TImp<T> *>(imp.get()); }
 
     void dump(ostream &out) const {

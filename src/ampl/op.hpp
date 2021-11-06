@@ -12,7 +12,7 @@ namespace ampl {
 
   struct VM;
   enum OpCode {
-    BENCH = 0, BRANCH, CALL, COPY, DEC, DROP, EQUAL, GOTO, LOAD, NOP, PUSH, RET, STORE,
+    BENCH = 0, BRANCH, CALL, COPY, DEC, DROP, EQUAL, GOTO, GTLIT, LOAD, LTLIT, NOP, PUSH, RET, STORE,
     //---STOP---
     STOP};
 
@@ -91,6 +91,15 @@ namespace ampl {
       PC pc;
     };
 
+    struct GtLit {
+      static const OpCode CODE = GTLIT;      
+
+      GtLit(const Form &form, optional<Val> x = nullopt, const optional<Val> y = nullopt): form(form), x(x), y(y) {}
+      
+      Form form;
+      optional<Val> x, y;
+    };
+
     struct Load {
       static const OpCode CODE = LOAD;      
 
@@ -98,6 +107,15 @@ namespace ampl {
       
       Form form;
       Reg reg;
+    };
+
+    struct LtLit {
+      static const OpCode CODE = LTLIT;      
+
+      LtLit(const Form &form, optional<Val> x = nullopt, const optional<Val> y = nullopt): form(form), x(x), y(y) {}
+      
+      Form form;
+      optional<Val> x, y;
     };
 
     struct Nop {
@@ -159,7 +177,10 @@ namespace ampl {
     variant<ops::Bench, ops::Branch,
 	    ops::Call, ops::Copy,
 	    ops::Dec, ops::Drop,
-	    ops::Equal, ops::Goto, ops::Load, ops::Nop, ops::Push, ops::Ret, ops::Store,
+	    ops::Equal,
+	    ops::Goto, ops::GtLit,
+	    ops::Load, ops::LtLit,
+	    ops::Nop, ops::Push, ops::Ret, ops::Store,
 	    //---STOP---
 	    ops::Stop> data;
   };

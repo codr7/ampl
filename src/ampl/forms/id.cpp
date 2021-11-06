@@ -43,13 +43,27 @@ namespace ampl::forms {
 	    in.pop_front();
 	  }
 
-	  if (func == vm.libs.math.int_sub_func) {
-	    Form x(move(in.front()));
-	    in.pop_front();
+	  if (func == vm.libs.math.int_gt_func) {
+	    Form x = pop_front(in);
+	    optional<Val> xv = x.val(vm);
+	    if (!xv) { x.emit(in, vm); }
+	    Form y = pop_front(in);
+	    optional<Val> yv = y.val(vm);
+	    if (!yv) { y.emit(in, vm); }
+	    vm.emit<ops::GtLit>(form, xv, yv);
+	  } else if (func == vm.libs.math.int_lt_func) {
+	    Form x = pop_front(in);
+	    optional<Val> xv = x.val(vm);
+	    if (!xv) { x.emit(in, vm); }
+	    Form y = pop_front(in);
+	    optional<Val> yv = y.val(vm);
+	    if (!yv) { y.emit(in, vm); }
+	    vm.emit<ops::LtLit>(form, xv, yv);
+	  } else if (func == vm.libs.math.int_sub_func) {
+	    Form x = pop_front(in);
 	    x.emit(in, vm);
 
-	    Form y(move(in.front()));
-	    in.pop_front();
+	    Form y = pop_front(in);
 	    
 	    if (y.is<forms::Lit>()) {
 	      vm.emit<ops::Dec>(form, y.as<forms::Lit>().val.as<int>());
